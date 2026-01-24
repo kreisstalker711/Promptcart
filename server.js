@@ -1,76 +1,59 @@
-const express = require('express');
-const cors = require('cors');
+const express = require("express");
+const path = require("path");
+const cors = require("cors");
 
 const app = express();
-const port = 3000;
+const PORT = 3000;
 
-// Middleware
 app.use(cors());
 app.use(express.json());
 
-/**
- * PROMPT BUILDER FUNCTION
- */
-const buildPrompt = (data) => {
-    const {
-        role = "General Assistant",
-        domain = "General Knowledge",
-        objective,
-        targetAudience = "General Audience",
-        tone = "Professional",
-        outputFormat = "Markdown",
-        constraints = "None specific"
-    } = data;
+// Serve static files
+app.use(express.static(__dirname));
 
-    return `You are a senior ${role} with expertise in ${domain}.
+// Pages
+app.get("/", (_, res) => res.sendFile(path.join(__dirname, "index.html")));
+app.get("/login", (_, res) => res.sendFile(path.join(__dirname, "login.html")));
+app.get("/settings", (_, res) => res.sendFile(path.join(__dirname, "settings.html")));
+app.get("/templates", (_, res) => res.sendFile(path.join(__dirname, "templates.html")));
+app.get("/generate", (_, res) => res.sendFile(path.join(__dirname, "generate.html")));
 
-Objective:
+// API
+app.post("/api/generate", (req, res) => {
+  const { role, domain, objective, targetAudience, tone, constraints } = req.body;
+
+  if (!objective) {
+    return res.status(400).json({ error: "Objective is required" });
+  }
+
+  const prompt = `
+Act as a world-class ${role || "Expert"}.
+
+DOMAIN:
+${domain || "General"}
+
+OBJECTIVE:
 ${objective}
 
-Context:
-Target audience: ${targetAudience}
+TARGET AUDIENCE:
+${targetAudience || "General"}
 
-Requirements:
-- Tone: ${tone}
-- Constraints: ${constraints}
+STYLE:
+Tone: ${tone || "Professional"}
+Constraints: ${constraints || "None"}
 
-Output format:
-${outputFormat}
+RULES:
+- Be clear and structured
+- Avoid vague responses
+- Follow industry best practices
 
-Quality rules:
-- Be precise and actionable
-- Avoid vague language
-- Follow industry best practices for ${domain}`;
-};
+OUTPUT:
+Deliver the final result clearly and professionally.
+`;
 
-// API Route
-app.post('/generate', (req, res) => {
-    try {
-        const { role, domain, objective, targetAudience, tone, outputFormat, constraints } = req.body;
-
-        if (!objective) {
-            return res.status(400).json({ error: "Objective is required" });
-        }
-
-        const structuredPrompt = buildPrompt({
-            role,
-            domain,
-            objective,
-            targetAudience,
-            tone,
-            outputFormat,
-            constraints
-        });
-
-        res.json({ success: true, prompt: structuredPrompt });
-
-    } catch (error) {
-        console.error("Generation Error:", error);
-        res.status(500).json({ error: "Internal Server Error" });
-    }
+  res.json({ prompt });
 });
 
-// Start Server
-app.listen(port, () => {
-    console.log(`✅ Server running at http://localhost:${port}`);
+app.listen(PORT, () => {
+  console.log(`🚀 PromptCart running at http://localhost:${PORT}`);
 });

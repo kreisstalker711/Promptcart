@@ -199,10 +199,11 @@
                 <span>📝</span>
                 <div>Templates</div>
             </a>
-            <a href="generate.html" class="sidebar-item active">
-                <span>✨</span>
-                <div>Generate Prompt</div>
-            </a>
+            <a href="/generate" class="sidebar-item active">
+            <span>✨</span>
+            <div>Generate Prompt</div>
+           </a>
+
             <a href="settings.html" class="sidebar-item">
                 <span>⚙️</span>
                 <div>Settings</div>
@@ -245,15 +246,6 @@
                         </select>
                     </div>
                     <div class="form-group">
-                        <label class="form-label">Format</label>
-                        <select class="form-select" id="userFormat">
-                            <option value="Paragraph">Paragraph</option>
-                            <option value="Bullet Points">Bullet Points</option>
-                            <option value="Code Block">Code Block</option>
-                            <option value="Step-by-Step Guide">Step-by-Step Guide</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
                         <label class="form-label">Constraints (Optional)</label>
                         <input type="text" class="form-input" id="userConstraints" placeholder="e.g. Max 200 words">
                     </div>
@@ -267,7 +259,7 @@
             <div class="result-section" id="resultSection">
                 <div class="result-header">
                     <div class="result-title">Generated Prompt</div>
-                    <button style="background:none; border:none; color:var(--primary); cursor:pointer; font-weight:600;">📋 Copy</button>
+                    <button id="copyBtn" style="background:none; border:none; color:var(--primary); cursor:pointer; font-weight:600;">📋 Copy</button>
                 </div>
                 <div class="prompt-output" id="promptOutput"></div>
             </div>
@@ -280,13 +272,13 @@
     const generateBtn = document.getElementById('generateBtn');
     const resultSection = document.getElementById('resultSection');
     const promptOutput = document.getElementById('promptOutput');
+    const copyBtn = document.getElementById('copyBtn');
 
     const userRole = document.getElementById('userRole');
     const userDomain = document.getElementById('userDomain');
     const userObjective = document.getElementById('userObjective');
     const userAudience = document.getElementById('userAudience');
     const userTone = document.getElementById('userTone');
-    const userFormat = document.getElementById('userFormat');
     const userConstraints = document.getElementById('userConstraints');
 
     menuToggle.addEventListener('click', () => sidebar.classList.toggle('open'));
@@ -316,16 +308,23 @@
             objective: userObjective.value,
             targetAudience: userAudience.value,
             tone: userTone.value,
-            outputFormat: userFormat.value,
             constraints: userConstraints.value
         };
 
+        // Determine API URL
+        // If we are on the backend port (3000), use relative path.
+        // Otherwise (file://, Live Server port 5500, etc), point to localhost:3000
+        const apiUrl = window.location.port === '3000' ? '/api/generate' : 'http://localhost:3000/api/generate';
         try {
-            const response = await fetch('http://localhost:3000/generate', {
+            const response = await fetch(apiUrl, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(requestData)
             });
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
 
             const data = await response.json();
 
@@ -339,12 +338,18 @@
             resultSection.scrollIntoView({ behavior: 'smooth' });
 
         } catch (error) {
-            console.error(error);
-            alert("❌ Server not running or error occurred");
+            console.error('Error:', error);
+            alert("❌ Server not running or error occurred. Make sure the server is running on http://localhost:3000");
         } finally {
             generateBtn.innerHTML = '<span>✨</span> Generate Magic';
             generateBtn.disabled = false;
         }
+    });
+
+    copyBtn.addEventListener('click', () => {
+        navigator.clipboard.writeText(promptOutput.textContent);
+        copyBtn.innerHTML = '✅ Copied!';
+        setTimeout(() => copyBtn.innerHTML = '📋 Copy', 2000);
     });
 </script>
 
