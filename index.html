@@ -407,6 +407,112 @@
         @keyframes scroll {
             to { transform: translateX(-50%); }
         }
+
+        /* Quick Actions */
+        .quick-actions {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+        .action-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            color: var(--text);
+        }
+        .action-card:hover {
+            border-color: var(--primary);
+            box-shadow: 0 0 20px rgba(108, 99, 255, 0.15);
+            transform: translateY(-2px);
+        }
+        .action-icon { font-size: 24px; margin-bottom: 8px; }
+        .action-label { font-weight: 600; font-size: 14px; }
+
+        /* Dashboard Grid (Stats + Graph) */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 24px;
+            margin-bottom: 40px;
+        }
+        @media (max-width: 1024px) { .dashboard-grid { grid-template-columns: 1fr; } }
+
+        .stat-box {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 24px;
+            height: 100%;
+        }
+        .graph-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .graph-bars { display: flex; align-items: flex-end; justify-content: space-between; height: 120px; gap: 12px; }
+        .bar-container { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 8px; }
+        .bar { width: 100%; background: var(--bg-hover); border-radius: 4px 4px 0 0; transition: height 0.5s ease; }
+        .bar:hover, .bar.active { background: var(--primary); }
+        .bar-label { font-size: 11px; color: var(--text-muted); }
+
+        .streak-card {
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.1), rgba(245, 158, 11, 0.05));
+            border: 1px solid rgba(245, 158, 11, 0.2);
+            border-radius: 12px;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+        .tip-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 20px;
+        }
+
+        /* Pinned & Search */
+        .pinned-section { margin-bottom: 32px; }
+        .pinned-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 16px; }
+        .pinned-card {
+            background: var(--bg-card); border: 1px solid var(--border);
+            border-left: 3px solid var(--primary); border-radius: 8px; padding: 16px;
+            cursor: pointer; transition: transform 0.2s;
+        }
+        .pinned-card:hover { transform: translateY(-2px); }
+
+        .controls-bar { display: flex; gap: 12px; margin-bottom: 20px; flex-wrap: wrap; }
+        .search-wrapper { flex: 1; position: relative; min-width: 240px; }
+        .search-input {
+            width: 100%; background: var(--bg-card); border: 1px solid var(--border);
+            padding: 10px 16px 10px 40px; border-radius: 8px; color: var(--text);
+        }
+        .search-icon { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--text-muted); }
+        .filter-select {
+            background: var(--bg-card); border: 1px solid var(--border);
+            padding: 10px 16px; border-radius: 8px; color: var(--text); cursor: pointer;
+        }
+
+        /* Badges */
+        .badges { display: flex; gap: 6px; margin-top: 12px; flex-wrap: wrap; }
+        .badge {
+            font-size: 10px; padding: 3px 8px; border-radius: 12px;
+            background: var(--bg); border: 1px solid var(--border);
+            color: var(--text-muted); display: flex; align-items: center; gap: 4px;
+        }
+        .badge-score { color: var(--success); font-weight: 600; margin-left: auto; font-size: 11px; }
+
+        .empty-state {
+            text-align: center; padding: 60px 20px;
+            background: var(--bg-card); border: 1px dashed var(--border);
+            border-radius: 12px; display: none;
+        }
     </style>
 </head>
 <body>
@@ -434,6 +540,10 @@
                 <span>📝</span>
                 <div>Templates</div>
             </a>
+            <a href="liked.html" class="sidebar-item">
+                <span>❤️</span>
+                <div>Liked Prompts</div>
+            </a>
             <a href="generate.html" class="sidebar-item">
                 <span>✨</span>
                 <div>Generate Prompt</div>
@@ -448,7 +558,7 @@
         <main class="main-content">
             <div class="hero-section">
                 <div class="typewriter">
-                    <h1>Reshape your prompt with &lt;promptcart&gt;</h1>
+                    <h1>Reshape your prompt with <span style="color:#8b5cf6; font-size: 29px;">&lt;promptcart&gt;</span></h1>
                 </div>
             </div>
 
@@ -479,18 +589,72 @@
 
             <h1 class="welcome">Welcome back, Creator 👋</h1>
 
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <div class="stat-label">Total Prompts</div>
-                    <div class="stat-value">247</div>
+            <!-- 1️⃣ Quick Actions Panel -->
+            <div class="quick-actions">
+                <a href="generate.html" class="action-card">
+                    <span class="action-icon">⚡</span>
+                    <span class="action-label">Generate Prompt</span>
+                </a>
+                <a href="liked.html" class="action-card">
+                    <span class="action-icon">⭐</span>
+                    <span class="action-label">Saved Prompts</span>
+                </a>
+                <a href="generate.html" class="action-card">
+                    <span class="action-icon">🧠</span>
+                    <span class="action-label">Optimize Prompt</span>
+                </a>
+                <a href="templates.html" class="action-card">
+                    <span class="action-icon">📚</span>
+                    <span class="action-label">Browse Templates</span>
+                </a>
+            </div>
+
+            <!-- 2️⃣ Usage Stats / Activity Graph -->
+            <div class="dashboard-grid">
+                <div class="stat-box">
+                    <div class="graph-header">
+                        <span class="graph-title">Activity (Last 7 Days)</span>
+                        <span style="font-size:12px; color:var(--text-muted);">Total: 25 Prompts</span>
+                    </div>
+                    <div class="graph-bars">
+                        <!-- Mock Data -->
+                        <div class="bar-container"><div class="bar" style="height: 30%"></div><span class="bar-label">M</span></div>
+                        <div class="bar-container"><div class="bar" style="height: 50%"></div><span class="bar-label">T</span></div>
+                        <div class="bar-container"><div class="bar" style="height: 20%"></div><span class="bar-label">W</span></div>
+                        <div class="bar-container"><div class="bar" style="height: 70%"></div><span class="bar-label">T</span></div>
+                        <div class="bar-container"><div class="bar" style="height: 40%"></div><span class="bar-label">F</span></div>
+                        <div class="bar-container"><div class="bar" style="height: 80%"></div><span class="bar-label">S</span></div>
+                        <div class="bar-container"><div class="bar active" style="height: 60%"></div><span class="bar-label">S</span></div>
+                    </div>
                 </div>
-                <div class="stat-card">
-                    <div class="stat-label">Saved Prompts</div>
-                    <div class="stat-value">89</div>
+                <div style="display: flex; flex-direction: column; gap: 16px;">
+                    <div class="streak-card">
+                        <span class="streak-icon">🔥</span>
+                        <div class="streak-info">
+                            <h4>3 Day Streak</h4>
+                            <p>You're on fire! Keep creating.</p>
+                        </div>
+                    </div>
+                    <!-- 8️⃣ Daily Tip -->
+                    <div class="tip-card">
+                        <div class="tip-header">💡 Daily Tip</div>
+                        <p class="tip-text">Adding constraints like "under 50 words" drastically improves output precision.</p>
+                    </div>
                 </div>
-                <div class="stat-card">
-                    <div class="stat-label">Categories</div>
-                    <div class="stat-value">12</div>
+            </div>
+
+            <!-- 3️⃣ Pinned / Favorite Prompts -->
+            <div class="pinned-section">
+                <h2 class="section-title" style="font-size: 18px; margin-bottom: 16px;">⭐ Pinned Prompts</h2>
+                <div class="pinned-grid">
+                    <div class="pinned-card" onclick="window.location.href='generate.html'">
+                        <div style="font-weight:600; margin-bottom:4px;">SEO Blog Post</div>
+                        <div style="font-size:12px; color:var(--text-muted);">Writing • Used 12 times</div>
+                    </div>
+                    <div class="pinned-card" onclick="window.location.href='generate.html'">
+                        <div style="font-weight:600; margin-bottom:4px;">Python Debugger</div>
+                        <div style="font-size:12px; color:var(--text-muted);">Coding • Used 8 times</div>
+                    </div>
                 </div>
             </div>
 
@@ -502,7 +666,30 @@
                 </button>
             </div>
 
-            <div class="prompts-list">
+            <!-- 5️⃣ Search + Filter -->
+            <div class="controls-bar">
+                <div class="search-wrapper">
+                    <span class="search-icon">🔍</span>
+                    <input type="text" class="search-input" id="searchInput" placeholder="Search recent prompts...">
+                </div>
+                <select class="filter-select" id="categoryFilter">
+                    <option value="all">All Categories</option>
+                    <option value="Writing">Writing</option>
+                    <option value="Coding">Coding</option>
+                    <option value="Marketing">Marketing</option>
+                    <option value="Study">Study</option>
+                </select>
+            </div>
+
+            <!-- 6️⃣ Empty State -->
+            <div class="empty-state" id="emptyState">
+                <div style="font-size: 40px; margin-bottom: 16px;">✨</div>
+                <h3>You haven't created any prompts yet</h3>
+                <p style="color: var(--text-muted); margin-bottom: 24px;">Start by creating your first AI prompt.</p>
+                <a href="generate.html" class="btn-primary" style="display: inline-flex;">Create your first prompt</a>
+            </div>
+
+            <div class="prompts-list" id="promptsList">
                 <div class="prompt-item">
                     <div class="prompt-header">
                         <div class="prompt-title">SEO Blog Post Generator</div>
@@ -510,6 +697,12 @@
                     </div>
                     <div class="prompt-desc">Create SEO-optimized blog posts with keyword integration and meta descriptions</div>
                     <span class="prompt-category">Writing</span>
+                    <!-- 4️⃣ Model Compatibility Badge & 7️⃣ Score -->
+                    <div class="badges">
+                        <span class="badge">ChatGPT</span>
+                        <span class="badge">Claude</span>
+                        <span class="badge-score">98/100</span>
+                    </div>
                 </div>
 
                 <div class="prompt-item">
@@ -519,6 +712,11 @@
                     </div>
                     <div class="prompt-desc">Analyze Python code and provide debugging suggestions with best practices</div>
                     <span class="prompt-category">Coding</span>
+                    <div class="badges">
+                        <span class="badge">Gemini</span>
+                        <span class="badge">ChatGPT</span>
+                        <span class="badge-score">95/100</span>
+                    </div>
                 </div>
 
                 <div class="prompt-item">
@@ -528,6 +726,10 @@
                     </div>
                     <div class="prompt-desc">Generate engaging social media captions with hashtags for multiple platforms</div>
                     <span class="prompt-category">Marketing</span>
+                    <div class="badges">
+                        <span class="badge">Claude</span>
+                        <span class="badge-score">92/100</span>
+                    </div>
                 </div>
 
                 <div class="prompt-item">
@@ -537,6 +739,10 @@
                     </div>
                     <div class="prompt-desc">Transform lecture notes into comprehensive study guides with key points</div>
                     <span class="prompt-category">Study</span>
+                    <div class="badges">
+                        <span class="badge">Gemini</span>
+                        <span class="badge-score">88/100</span>
+                    </div>
                 </div>
 
                 <div class="prompt-item">
@@ -546,6 +752,10 @@
                     </div>
                     <div class="prompt-desc">Create compelling product descriptions that convert visitors into customers</div>
                     <span class="prompt-category">Marketing</span>
+                    <div class="badges">
+                        <span class="badge">ChatGPT</span>
+                        <span class="badge-score">94/100</span>
+                    </div>
                 </div>
             </div>
         </main>
@@ -554,6 +764,11 @@
     <script>
         const menuToggle = document.getElementById('menuToggle');
         const sidebar = document.getElementById('sidebar');
+        const searchInput = document.getElementById('searchInput');
+        const categoryFilter = document.getElementById('categoryFilter');
+        const promptsList = document.getElementById('promptsList');
+        const emptyState = document.getElementById('emptyState');
+        const promptItems = document.querySelectorAll('.prompt-item');
 
         menuToggle.addEventListener('click', () => {
             sidebar.classList.toggle('open');
@@ -566,6 +781,41 @@
                 }
             }
         });
+
+        // Search & Filter Logic
+        function filterPrompts() {
+            const searchTerm = searchInput.value.toLowerCase();
+            const category = categoryFilter.value;
+            let visibleCount = 0;
+
+            promptItems.forEach(item => {
+                const title = item.querySelector('.prompt-title').innerText.toLowerCase();
+                const desc = item.querySelector('.prompt-desc').innerText.toLowerCase();
+                const itemCategory = item.querySelector('.prompt-category').innerText;
+                
+                const matchesSearch = title.includes(searchTerm) || desc.includes(searchTerm);
+                const matchesCategory = category === 'all' || itemCategory === category;
+
+                if (matchesSearch && matchesCategory) {
+                    item.style.display = 'block';
+                    visibleCount++;
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+
+            // Toggle Empty State
+            if (visibleCount === 0) {
+                promptsList.style.display = 'none';
+                emptyState.style.display = 'block';
+            } else {
+                promptsList.style.display = 'block';
+                emptyState.style.display = 'none';
+            }
+        }
+
+        searchInput.addEventListener('input', filterPrompts);
+        categoryFilter.addEventListener('change', filterPrompts);
     </script>
 </body>
 </html>

@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Liked Prompts - PromptCart</title>
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <script>
+        if (localStorage.getItem('theme') === 'light') {
+            document.documentElement.classList.add('light-theme');
+        }
+        if (localStorage.getItem('isLoggedIn') !== 'true') {
+            window.location.href = 'login.html';
+        }
+    </script>
+    <style>
+        :root {
+            --primary: #6C63FF;
+            --primary-hover: #5850e6;
+            --bg: #0f0f23;
+            --bg-card: #1a1a2e;
+            --bg-hover: #252540;
+            --text: #e4e4e7;
+            --text-muted: #a1a1aa;
+            --border: #27272a;
+            --success: #10b981;
+        }
+        :root.light-theme {
+            --bg: #f4f4f5;
+            --bg-card: #ffffff;
+            --bg-hover: #f9fafb;
+            --text: #18181b;
+            --text-muted: #71717a;
+            --border: #e4e4e7;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+        }
+        .navbar {
+            background: var(--bg-card);
+            border-bottom: 1px solid var(--border);
+            padding: 16px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .logo {
+            font-size: 20px;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary) 0%, #a78bfa 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .container { display: flex; min-height: calc(100vh - 69px); }
+        .sidebar {
+            width: 260px;
+            background: var(--bg-card);
+            border-right: 1px solid var(--border);
+            padding: 24px 0;
+            position: sticky;
+            top: 69px;
+            height: calc(100vh - 69px);
+        }
+        .sidebar-item {
+            padding: 12px 24px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .sidebar-item:hover { background: var(--bg-hover); color: var(--text); }
+        .sidebar-item.active {
+            background: rgba(108, 99, 255, 0.1);
+            color: var(--primary);
+            border-left: 3px solid var(--primary);
+        }
+        .main-content { flex: 1; padding: 32px; overflow-y: auto; }
+        .page-title { font-size: 28px; font-weight: 600; margin-bottom: 24px; }
+        
+        .templates-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 24px;
+        }
+        .template-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 24px;
+            transition: all 0.3s ease;
+        }
+        .template-category {
+            display: inline-block;
+            padding: 4px 12px;
+            background: rgba(108, 99, 255, 0.1);
+            color: var(--primary);
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            margin-bottom: 12px;
+        }
+        .template-title { font-size: 18px; font-weight: 600; margin-bottom: 12px; }
+        .template-desc { color: var(--text-muted); font-size: 14px; line-height: 1.6; margin-bottom: 20px; }
+        .template-actions { display: flex; gap: 12px; }
+        .btn {
+            flex: 1;
+            padding: 10px 16px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+        .btn-copy { background: var(--bg); color: var(--text); border: 1px solid var(--border); }
+        .btn-copy:hover { background: var(--bg-hover); border-color: var(--primary); }
+        .btn-use { background: var(--primary); color: white; }
+        .btn-use:hover { background: var(--primary-hover); }
+        .btn-like {
+            background: transparent;
+            border: 1px solid var(--border);
+            color: #ef4444;
+            font-size: 16px;
+            background: rgba(239, 68, 68, 0.1);
+            border-color: #ef4444;
+        }
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            color: var(--text-muted);
+        }
+        .toast {
+            position: fixed; bottom: 24px; right: 24px;
+            background: var(--success); color: white;
+            padding: 16px 24px; border-radius: 8px;
+            opacity: 0; transform: translateY(20px);
+            transition: all 0.3s ease;
+        }
+        .toast.show { opacity: 1; transform: translateY(0); }
+        .mobile-menu-btn { display: none; background: none; border: none; color: var(--text); font-size: 24px; }
+        @media (max-width: 768px) {
+            .sidebar { position: fixed; left: -260px; z-index: 99; transition: left 0.3s ease; }
+            .sidebar.open { left: 0; }
+            .mobile-menu-btn { display: block; }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div style="display: flex; align-items: center; gap: 16px;">
+            <button class="mobile-menu-btn" id="menuToggle">☰</button>
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <img src="logo.png" alt="PromptCart Logo" style="height: 32px;">
+                <div class="logo">PromptCart</div>
+            </div>
+        </div>
+        <div class="user-avatar" onclick="window.location.href='settings.html'">U</div>
+    </nav>
+
+    <div class="container">
+        <aside class="sidebar" id="sidebar">
+            <a href="index.html" class="sidebar-item">
+                <span>📊</span>
+                <div>Dashboard</div>
+            </a>
+            <a href="templates.html" class="sidebar-item">
+                <span>📝</span>
+                <div>Templates</div>
+            </a>
+            <a href="liked.html" class="sidebar-item active">
+                <span>❤️</span>
+                <div>Liked Prompts</div>
+            </a>
+            <a href="generate.html" class="sidebar-item">
+                <span>✨</span>
+                <div>Generate Prompt</div>
+            </a>
+            <a href="settings.html" class="sidebar-item">
+                <span>⚙️</span>
+                <div>Settings</div>
+            </a>
+        </aside>
+
+        <main class="main-content">
+            <h1 class="page-title">Liked Prompts</h1>
+            <div class="templates-grid" id="likedGrid">
+                <!-- Populated by JS -->
+            </div>
+        </main>
+    </div>
+
+    <div class="toast" id="toast">Prompt copied to clipboard!</div>
+
+    <script>
+        const menuToggle = document.getElementById('menuToggle');
+        const sidebar = document.getElementById('sidebar');
+        const likedGrid = document.getElementById('likedGrid');
+        const toast = document.getElementById('toast');
+
+        menuToggle.addEventListener('click', () => sidebar.classList.toggle('open'));
+        document.addEventListener('click', (e) => {
+            if (window.innerWidth <= 768 && !sidebar.contains(e.target) && !menuToggle.contains(e.target)) {
+                sidebar.classList.remove('open');
+            }
+        });
+
+        function renderLikedPrompts() {
+            const likedPrompts = JSON.parse(localStorage.getItem('likedPrompts') || '[]');
+            likedGrid.innerHTML = '';
+
+            if (likedPrompts.length === 0) {
+                likedGrid.innerHTML = `
+                    <div class="empty-state" style="grid-column: 1/-1;">
+                        <h3>No liked prompts yet</h3>
+                        <p>Go to Templates to explore and save your favorites!</p>
+                        <a href="templates.html" class="btn btn-use" style="display:inline-flex; margin-top:16px; width:auto;">Explore Templates</a>
+                    </div>
+                `;
+                return;
+            }
+
+            likedPrompts.forEach((prompt, index) => {
+                const card = document.createElement('div');
+                card.className = 'template-card';
+                card.innerHTML = `
+                    <div class="template-category">${prompt.category}</div>
+                    <h3 class="template-title">${prompt.title}</h3>
+                    <p class="template-desc">${prompt.desc}</p>
+                    <div class="template-actions">
+                        <button class="btn btn-like liked" onclick="unlikePrompt(${index})">❤️</button>
+                        <button class="btn btn-copy" onclick="copyPrompt(this, '${prompt.prompt.replace(/'/g, "\\'")}')">📋 Copy</button>
+                        <button class="btn btn-use">✨ Use</button>
+                    </div>
+                `;
+                likedGrid.appendChild(card);
+            });
+        }
+
+        window.unlikePrompt = function(index) {
+            let likedPrompts = JSON.parse(localStorage.getItem('likedPrompts') || '[]');
+            likedPrompts.splice(index, 1);
+            localStorage.setItem('likedPrompts', JSON.stringify(likedPrompts));
+            renderLikedPrompts();
+        }
+
+        window.copyPrompt = async function(btn, text) {
+            try {
+                await navigator.clipboard.writeText(text);
+                showToast();
+            } catch (err) {
+                // Fallback
+                const textArea = document.createElement('textarea');
+                textArea.value = text;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                showToast();
+            }
+        }
+
+        function showToast() {
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 2000);
+        }
+
+        renderLikedPrompts();
+    </script>
+</body>
+</html>

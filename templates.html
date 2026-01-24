@@ -365,6 +365,18 @@
                 grid-template-columns: 1fr;
             }
         }
+
+        .btn-like {
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--text-muted);
+            font-size: 16px;
+        }
+        .btn-like.liked {
+            color: #ef4444;
+            border-color: #ef4444;
+            background: rgba(239, 68, 68, 0.1);
+        }
     </style>
 </head>
 <body>
@@ -389,6 +401,10 @@
                 <span>📝</span>
                 <div>Templates</div>
             </a>
+            <a href="liked.html" class="sidebar-item">
+                <span>❤️</span>
+                <div>Liked Prompts</div>
+            </a>
             <a href="generate.html" class="sidebar-item">
                 <span>✨</span>
                 <div>Generate Prompt</div>
@@ -408,64 +424,15 @@
                 <button class="filter-btn" data-filter="coding">Coding</button>
                 <button class="filter-btn" data-filter="marketing">Marketing</button>
                 <button class="filter-btn" data-filter="study">Study</button>
-                <button class="filter-btn" data-filter="image">Image</button>
             </div>
 
             <div class="templates-grid" id="templatesGrid">
                 <div class="template-card" data-category="writing">
                     <div class="template-category">Writing</div>
-                    <h3 class="template-title">Blog Post Writer</h3>
-                    <p class="template-desc">Create engaging blog posts on any topic with SEO optimization and natural flow</p>
+                    <h3 class="template-title">Article Writer</h3>
+                    <p class="template-desc">Write a clear, engaging article on {Topic} tailored for {Audience} with a natural, human-like flow.</p>
                     <div class="template-actions">
-                        <button class="btn btn-copy" data-prompt="Act as a professional content writer.&#10;&#10;CATEGORY: Writing&#10;&#10;GOAL:&#10;Write high-quality content on: [topic]&#10;&#10;CONTEXT:&#10;Audience: [students / developers / general public]&#10;Platform: [blog / Instagram / YouTube script / website]&#10;&#10;FILTERS:&#10;- Tone: [friendly / professional / persuasive]&#10;- Style: [simple English / storytelling]&#10;- Length: [300 words]&#10;- SEO: [yes/no]&#10;- Language: [English]&#10;&#10;RULES:&#10;- Clear structure&#10;- No AI-sounding phrases&#10;- Engaging intro and strong ending&#10;&#10;OUTPUT:&#10;Deliver ready-to-publish content.">
-                            📋 Copy
-                        </button>
-                        <button class="btn btn-use">✨ Use</button>
-                    </div>
-                </div>
-
-                <div class="template-card" data-category="coding">
-                    <div class="template-category">Coding</div>
-                    <h3 class="template-title">Code Reviewer</h3>
-                    <p class="template-desc">Get detailed code reviews with best practices and optimization suggestions</p>
-                    <div class="template-actions">
-                        <button class="btn btn-copy" data-prompt="Act as a senior software engineer.&#10;&#10;CATEGORY: Coding&#10;&#10;GOAL:&#10;Build / Explain / Debug: [feature or problem]&#10;&#10;CONTEXT:&#10;Project type: [web app / mobile app]&#10;Environment: [frontend / backend / full-stack]&#10;&#10;FILTERS:&#10;- Tech Stack: [Node.js, Express, React, MongoDB]&#10;- Code Quality: Production-ready&#10;- Comments: Yes&#10;- Error Handling: Required&#10;- Performance: Optimized&#10;- Security: Best practices&#10;&#10;RULES:&#10;- No vague explanations&#10;- Explain WHY, not just HOW&#10;- Follow industry standards&#10;- Modular code&#10;&#10;OUTPUT:&#10;- Clean code&#10;- Step-by-step explanation&#10;- Folder structure (if needed)">
-                            📋 Copy
-                        </button>
-                        <button class="btn btn-use">✨ Use</button>
-                    </div>
-                </div>
-
-                <div class="template-card" data-category="marketing">
-                    <div class="template-category">Marketing</div>
-                    <h3 class="template-title">Ad Copy Generator</h3>
-                    <p class="template-desc">Generate compelling ad copy that converts for various platforms</p>
-                    <div class="template-actions">
-                        <button class="btn btn-copy" data-prompt="Create persuasive ad copy for [PRODUCT/SERVICE] targeting [AUDIENCE]. Include multiple variations for A/B testing with clear CTAs and benefit-focused messaging.">
-                            📋 Copy
-                        </button>
-                        <button class="btn btn-use">✨ Use</button>
-                    </div>
-                </div>
-
-                <div class="template-card" data-category="study">
-                    <div class="template-category">Study</div>
-                    <h3 class="template-title">Study Notes Summarizer</h3>
-                    <p class="template-desc">Transform lengthy notes into concise, organized study materials</p>
-                    <div class="template-actions">
-                        <button class="btn btn-copy" data-prompt="Summarize these study notes into clear, organized bullet points. Include key concepts, definitions, and important examples. Format for easy review and memorization.">
-                            📋 Copy
-                        </button>
-                        <button class="btn btn-use">✨ Use</button>
-                    </div>
-                </div>
-
-                <div class="template-card" data-category="image">
-                    <div class="template-category">Image</div>
-                    <h3 class="template-title">AI Image Prompt Creator</h3>
-                    <p class="template-desc">Generate detailed prompts for AI image generation tools</p>
-                    <div class="template-actions">
-                        <button class="btn btn-copy" data-prompt="Create a detailed image generation prompt for [DESCRIPTION]. Include style, lighting, composition, camera angle, colors, mood, and artistic influences. Format optimized for Midjourney/DALL-E.">
+                        <button class="btn btn-copy" data-prompt="Write a clear, engaging article on {Topic} tailored for {Audience} with a natural, human-like flow.">
                             📋 Copy
                         </button>
                         <button class="btn btn-use">✨ Use</button>
@@ -474,58 +441,22 @@
 
                 <div class="template-card" data-category="writing">
                     <div class="template-category">Writing</div>
-                    <h3 class="template-title">Email Composer</h3>
-                    <p class="template-desc">Craft professional emails for any business situation</p>
+                    <h3 class="template-title">Blog Post Creator</h3>
+                    <p class="template-desc">Create a compelling blog post on {Topic} with structured headings and smooth transitions.</p>
                     <div class="template-actions">
-                        <button class="btn btn-copy" data-prompt="Compose a professional email for [PURPOSE]. Maintain appropriate tone, clear subject line, and structured content with greeting and sign-off.">
+                        <button class="btn btn-copy" data-prompt="Create a compelling blog post on {Topic} with structured headings and smooth transitions.">
                             📋 Copy
                         </button>
                         <button class="btn btn-use">✨ Use</button>
                     </div>
                 </div>
 
-                <div class="template-card" data-category="coding">
-                    <div class="template-category">Coding</div>
-                    <h3 class="template-title">Bug Fixer</h3>
-                    <p class="template-desc">Identify and fix bugs in your code with explanations</p>
+                <div class="template-card" data-category="writing">
+                    <div class="template-category">Writing</div>
+                    <h3 class="template-title">Content Rewriter</h3>
+                    <p class="template-desc">Rewrite the given content to be more engaging, concise, and reader-friendly.</p>
                     <div class="template-actions">
-                        <button class="btn btn-copy" data-prompt="Analyze this code for bugs and errors. Provide the corrected code with explanations of what was wrong and why the fix works. Include prevention tips.">
-                            📋 Copy
-                        </button>
-                        <button class="btn btn-use">✨ Use</button>
-                    </div>
-                </div>
-
-                <div class="template-card" data-category="marketing">
-                    <div class="template-category">Marketing</div>
-                    <h3 class="template-title">Social Media Planner</h3>
-                    <p class="template-desc">Plan content calendars with engaging post ideas</p>
-                    <div class="template-actions">
-                        <button class="btn btn-copy" data-prompt="Create a 30-day social media content calendar for [BRAND/NICHE]. Include post ideas, captions, hashtags, and best posting times for maximum engagement.">
-                            📋 Copy
-                        </button>
-                        <button class="btn btn-use">✨ Use</button>
-                    </div>
-                </div>
-
-                <div class="template-card" data-category="study">
-                    <div class="template-category">Study</div>
-                    <h3 class="template-title">Quiz Generator</h3>
-                    <p class="template-desc">Generate practice quizzes from any study material</p>
-                    <div class="template-actions">
-                        <button class="btn btn-copy" data-prompt="Create a comprehensive quiz with 20 questions based on [TOPIC/MATERIAL]. Include multiple choice, true/false, and short answer questions with an answer key.">
-                            📋 Copy
-                        </button>
-                        <button class="btn btn-use">✨ Use</button>
-                    </div>
-                </div>
-
-                <div class="template-card" data-category="image">
-                    <div class="template-category">Image</div>
-                    <h3 class="template-title">Logo Design Prompt</h3>
-                    <p class="template-desc">Create prompts for AI-generated logo designs</p>
-                    <div class="template-actions">
-                        <button class="btn btn-copy" data-prompt="Generate a logo design prompt for [COMPANY/BRAND]. Specify design style, color palette, symbolism, target audience feel, and format requirements. Keep it minimalist and scalable.">
+                        <button class="btn btn-copy" data-prompt="Rewrite the given content to be more engaging, concise, and reader-friendly.">
                             📋 Copy
                         </button>
                         <button class="btn btn-use">✨ Use</button>
@@ -535,9 +466,21 @@
                 <div class="template-card" data-category="writing">
                     <div class="template-category">Writing</div>
                     <h3 class="template-title">Story Generator</h3>
-                    <p class="template-desc">Create engaging stories with compelling narratives</p>
+                    <p class="template-desc">Generate a creative story based on {Theme} with a strong opening and satisfying ending.</p>
                     <div class="template-actions">
-                        <button class="btn btn-copy" data-prompt="Write a creative story about [THEME/CONCEPT]. Include vivid descriptions, character development, dialogue, and a satisfying narrative arc with beginning, middle, and end.">
+                        <button class="btn btn-copy" data-prompt="Generate a creative story based on {Theme} with a strong opening and satisfying ending.">
+                            📋 Copy
+                        </button>
+                        <button class="btn btn-use">✨ Use</button>
+                    </div>
+                </div>
+
+                <div class="template-card" data-category="writing">
+                    <div class="template-category">Writing</div>
+                    <h3 class="template-title">Email Drafter</h3>
+                    <p class="template-desc">Draft a professional email on {Subject} with the desired tone and clarity.</p>
+                    <div class="template-actions">
+                        <button class="btn btn-copy" data-prompt="Draft a professional email on {Subject} with the desired tone and clarity.">
                             📋 Copy
                         </button>
                         <button class="btn btn-use">✨ Use</button>
@@ -546,10 +489,178 @@
 
                 <div class="template-card" data-category="coding">
                     <div class="template-category">Coding</div>
-                    <h3 class="template-title">API Documentation Writer</h3>
-                    <p class="template-desc">Generate clear API documentation with examples</p>
+                    <h3 class="template-title">Code Generator</h3>
+                    <p class="template-desc">Generate clean, efficient {Language} code to solve {Problem} with comments included.</p>
                     <div class="template-actions">
-                        <button class="btn btn-copy" data-prompt="Create comprehensive API documentation for [ENDPOINT/API]. Include description, parameters, request/response examples, error codes, and usage examples in multiple languages.">
+                        <button class="btn btn-copy" data-prompt="Generate clean, efficient {Language} code to solve {Problem} with comments included.">
+                            📋 Copy
+                        </button>
+                        <button class="btn btn-use">✨ Use</button>
+                    </div>
+                </div>
+
+                <div class="template-card" data-category="coding">
+                    <div class="template-category">Coding</div>
+                    <h3 class="template-title">Code Debugger</h3>
+                    <p class="template-desc">Debug and fix issues in the following code while explaining the solution clearly.</p>
+                    <div class="template-actions">
+                        <button class="btn btn-copy" data-prompt="Debug and fix issues in the following code while explaining the solution clearly.">
+                            📋 Copy
+                        </button>
+                        <button class="btn btn-use">✨ Use</button>
+                    </div>
+                </div>
+
+                <div class="template-card" data-category="coding">
+                    <div class="template-category">Coding</div>
+                    <h3 class="template-title">Code Refactorer</h3>
+                    <p class="template-desc">Refactor the given code to improve readability, performance, and best practices.</p>
+                    <div class="template-actions">
+                        <button class="btn btn-copy" data-prompt="Refactor the given code to improve readability, performance, and best practices.">
+                            📋 Copy
+                        </button>
+                        <button class="btn btn-use">✨ Use</button>
+                    </div>
+                </div>
+
+                <div class="template-card" data-category="coding">
+                    <div class="template-category">Coding</div>
+                    <h3 class="template-title">Code Explainer</h3>
+                    <p class="template-desc">Explain how the provided code works in simple, beginner-friendly terms.</p>
+                    <div class="template-actions">
+                        <button class="btn btn-copy" data-prompt="Explain how the provided code works in simple, beginner-friendly terms.">
+                            📋 Copy
+                        </button>
+                        <button class="btn btn-use">✨ Use</button>
+                    </div>
+                </div>
+
+                <div class="template-card" data-category="coding">
+                    <div class="template-category">Coding</div>
+                    <h3 class="template-title">Reusable Function</h3>
+                    <p class="template-desc">Write a reusable function in {Language} that follows industry standards.</p>
+                    <div class="template-actions">
+                        <button class="btn btn-copy" data-prompt="Write a reusable function in {Language} that follows industry standards.">
+                            📋 Copy
+                        </button>
+                        <button class="btn btn-use">✨ Use</button>
+                    </div>
+                </div>
+
+                <div class="template-card" data-category="marketing">
+                    <div class="template-category">Marketing</div>
+                    <h3 class="template-title">Marketing Copy</h3>
+                    <p class="template-desc">Write persuasive marketing copy for {Product} targeting {Audience}.</p>
+                    <div class="template-actions">
+                        <button class="btn btn-copy" data-prompt="Write persuasive marketing copy for {Product} targeting {Audience}.">
+                            📋 Copy
+                        </button>
+                        <button class="btn btn-use">✨ Use</button>
+                    </div>
+                </div>
+
+                <div class="template-card" data-category="marketing">
+                    <div class="template-category">Marketing</div>
+                    <h3 class="template-title">Ad Copy Generator</h3>
+                    <p class="template-desc">Generate high-converting ad copy focused on benefits, clarity, and action.</p>
+                    <div class="template-actions">
+                        <button class="btn btn-copy" data-prompt="Generate high-converting ad copy focused on benefits, clarity, and action.">
+                            📋 Copy
+                        </button>
+                        <button class="btn btn-use">✨ Use</button>
+                    </div>
+                </div>
+
+                <div class="template-card" data-category="marketing">
+                    <div class="template-category">Marketing</div>
+                    <h3 class="template-title">Product Description</h3>
+                    <p class="template-desc">Create an SEO-optimized product description for {Product} with a strong CTA.</p>
+                    <div class="template-actions">
+                        <button class="btn btn-copy" data-prompt="Create an SEO-optimized product description for {Product} with a strong CTA.">
+                            📋 Copy
+                        </button>
+                        <button class="btn btn-use">✨ Use</button>
+                    </div>
+                </div>
+
+                <div class="template-card" data-category="marketing">
+                    <div class="template-category">Marketing</div>
+                    <h3 class="template-title">Landing Page Copy</h3>
+                    <p class="template-desc">Write a compelling landing page headline and subheading for {Offer}.</p>
+                    <div class="template-actions">
+                        <button class="btn btn-copy" data-prompt="Write a compelling landing page headline and subheading for {Offer}.">
+                            📋 Copy
+                        </button>
+                        <button class="btn btn-use">✨ Use</button>
+                    </div>
+                </div>
+
+                <div class="template-card" data-category="marketing">
+                    <div class="template-category">Marketing</div>
+                    <h3 class="template-title">Cold Email</h3>
+                    <p class="template-desc">Draft a professional cold email to promote {Service} without sounding spammy.</p>
+                    <div class="template-actions">
+                        <button class="btn btn-copy" data-prompt="Draft a professional cold email to promote {Service} without sounding spammy.">
+                            📋 Copy
+                        </button>
+                        <button class="btn btn-use">✨ Use</button>
+                    </div>
+                </div>
+
+                <div class="template-card" data-category="study">
+                    <div class="template-category">Study</div>
+                    <h3 class="template-title">Concept Explainer</h3>
+                    <p class="template-desc">Explain {Concept} in simple terms with easy examples for quick understanding.</p>
+                    <div class="template-actions">
+                        <button class="btn btn-copy" data-prompt="Explain {Concept} in simple terms with easy examples for quick understanding.">
+                            📋 Copy
+                        </button>
+                        <button class="btn btn-use">✨ Use</button>
+                    </div>
+                </div>
+
+                <div class="template-card" data-category="study">
+                    <div class="template-category">Study</div>
+                    <h3 class="template-title">Topic Summarizer</h3>
+                    <p class="template-desc">Summarize the given topic into clear, exam-focused notes.</p>
+                    <div class="template-actions">
+                        <button class="btn btn-copy" data-prompt="Summarize the given topic into clear, exam-focused notes.">
+                            📋 Copy
+                        </button>
+                        <button class="btn btn-use">✨ Use</button>
+                    </div>
+                </div>
+
+                <div class="template-card" data-category="study">
+                    <div class="template-category">Study</div>
+                    <h3 class="template-title">Practice Questions</h3>
+                    <p class="template-desc">Generate practice questions and answers based on {Subject}.</p>
+                    <div class="template-actions">
+                        <button class="btn btn-copy" data-prompt="Generate practice questions and answers based on {Subject}.">
+                            📋 Copy
+                        </button>
+                        <button class="btn btn-use">✨ Use</button>
+                    </div>
+                </div>
+
+                <div class="template-card" data-category="study">
+                    <div class="template-category">Study</div>
+                    <h3 class="template-title">Study Plan</h3>
+                    <p class="template-desc">Create a step-by-step study plan to master {Topic} efficiently.</p>
+                    <div class="template-actions">
+                        <button class="btn btn-copy" data-prompt="Create a step-by-step study plan to master {Topic} efficiently.">
+                            📋 Copy
+                        </button>
+                        <button class="btn btn-use">✨ Use</button>
+                    </div>
+                </div>
+
+                <div class="template-card" data-category="study">
+                    <div class="template-category">Study</div>
+                    <h3 class="template-title">Content Simplifier</h3>
+                    <p class="template-desc">Simplify complex content into short, easy-to-remember points.</p>
+                    <div class="template-actions">
+                        <button class="btn btn-copy" data-prompt="Simplify complex content into short, easy-to-remember points.">
                             📋 Copy
                         </button>
                         <button class="btn btn-use">✨ Use</button>
@@ -568,6 +679,59 @@
         const templateCards = document.querySelectorAll('.template-card');
         const copyBtns = document.querySelectorAll('.btn-copy');
         const toast = document.getElementById('toast');
+
+        // Initialize Like Buttons
+        function initLikeButtons() {
+            const likedPrompts = JSON.parse(localStorage.getItem('likedPrompts') || '[]');
+            
+            templateCards.forEach(card => {
+                const actionsDiv = card.querySelector('.template-actions');
+                
+                // Check if button already exists to prevent duplicates
+                if (actionsDiv.querySelector('.btn-like')) return;
+
+                const promptText = card.querySelector('.btn-copy').dataset.prompt;
+                const isLiked = likedPrompts.some(p => p.prompt === promptText);
+
+                const likeBtn = document.createElement('button');
+                likeBtn.className = `btn btn-like ${isLiked ? 'liked' : ''}`;
+                likeBtn.innerHTML = isLiked ? '❤️' : '♡';
+                
+                likeBtn.addEventListener('click', () => {
+                    toggleLike(card, likeBtn);
+                });
+
+                // Insert as the first button
+                actionsDiv.insertBefore(likeBtn, actionsDiv.firstChild);
+            });
+        }
+
+        function toggleLike(card, btn) {
+            const title = card.querySelector('.template-title').innerText;
+            const desc = card.querySelector('.template-desc').innerText;
+            const category = card.querySelector('.template-category').innerText;
+            const prompt = card.querySelector('.btn-copy').dataset.prompt;
+            
+            let likedPrompts = JSON.parse(localStorage.getItem('likedPrompts') || '[]');
+            const existingIndex = likedPrompts.findIndex(p => p.prompt === prompt);
+
+            if (existingIndex >= 0) {
+                // Unlike
+                likedPrompts.splice(existingIndex, 1);
+                btn.classList.remove('liked');
+                btn.innerHTML = '♡';
+            } else {
+                // Like
+                likedPrompts.push({ title, desc, category, prompt });
+                btn.classList.add('liked');
+                btn.innerHTML = '❤️';
+            }
+
+            localStorage.setItem('likedPrompts', JSON.stringify(likedPrompts));
+        }
+
+        // Run initialization
+        initLikeButtons();
 
         menuToggle.addEventListener('click', () => {
             sidebar.classList.toggle('open');
