@@ -376,6 +376,37 @@
         @keyframes blink-caret { from, to { border-color: transparent } 50% { border-color: var(--primary) } 100% {} }
 
         @media (max-width: 768px) { .typewriter h1 { white-space: normal; border: none; animation: none; width: auto; } }
+
+        /* Infinite Carousel */
+        .carousel-container {
+            width: 100%;
+            overflow: hidden;
+            margin-bottom: 40px;
+            position: relative;
+            mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+            -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+        }
+
+        .carousel-track {
+            display: flex;
+            width: max-content;
+            animation: scroll 30s linear infinite;
+        }
+
+        .carousel-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 0 40px;
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text-muted);
+            white-space: nowrap;
+        }
+
+        @keyframes scroll {
+            to { transform: translateX(-50%); }
+        }
     </style>
 </head>
 <body>
@@ -418,6 +449,31 @@
             <div class="hero-section">
                 <div class="typewriter">
                     <h1>Reshape your prompt with &lt;promptcart&gt;</h1>
+                </div>
+            </div>
+
+            <div class="carousel-container">
+                <div class="carousel-track">
+                    <!-- Set 1 -->
+                    <div class="carousel-item"><span>🤖</span> ChatGPT</div>
+                    <div class="carousel-item"><span>🧠</span> Claude</div>
+                    <div class="carousel-item"><span>✨</span> Gemini</div>
+                    <div class="carousel-item"><span>🤖</span> ChatGPT</div>
+                    <div class="carousel-item"><span>🧠</span> Claude</div>
+                    <div class="carousel-item"><span>✨</span> Gemini</div>
+                    <div class="carousel-item"><span>🤖</span> ChatGPT</div>
+                    <div class="carousel-item"><span>🧠</span> Claude</div>
+                    <div class="carousel-item"><span>✨</span> Gemini</div>
+                    <!-- Set 2 (Duplicate for seamless loop) -->
+                    <div class="carousel-item"><span>🤖</span> ChatGPT</div>
+                    <div class="carousel-item"><span>🧠</span> Claude</div>
+                    <div class="carousel-item"><span>✨</span> Gemini</div>
+                    <div class="carousel-item"><span>🤖</span> ChatGPT</div>
+                    <div class="carousel-item"><span>🧠</span> Claude</div>
+                    <div class="carousel-item"><span>✨</span> Gemini</div>
+                    <div class="carousel-item"><span>🤖</span> ChatGPT</div>
+                    <div class="carousel-item"><span>🧠</span> Claude</div>
+                    <div class="carousel-item"><span>✨</span> Gemini</div>
                 </div>
             </div>
 
