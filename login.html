@@ -292,7 +292,14 @@
             }
 
             if (isValid) {
-                window.location.href = 'dashboard.html';
+                // Save login state and user details
+                localStorage.setItem('isLoggedIn', 'true');
+                localStorage.setItem('userEmail', emailInput.value);
+                // Initialize prompt count if it doesn't exist
+                if (!localStorage.getItem('promptCount')) {
+                    localStorage.setItem('promptCount', '0');
+                }
+                window.location.href = 'index.html';
             }
         });
 

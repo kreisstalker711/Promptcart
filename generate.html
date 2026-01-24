@@ -10,6 +10,10 @@
         if (localStorage.getItem('theme') === 'light') {
             document.documentElement.classList.add('light-theme');
         }
+        // Auth Check
+        if (localStorage.getItem('isLoggedIn') !== 'true') {
+            window.location.href = 'login.html';
+        }
     </script>
     <style>
         :root {
@@ -179,10 +183,10 @@
             <button class="mobile-menu-btn" id="menuToggle">☰</button>
             <div style="display: flex; align-items: center; gap: 10px;">
                 <img src="logo.png" alt="PromptCart Logo" style="height: 32px;">
-                <div class="logo">PromptCart</div>
+                <div class="logo">Promptcart</div>
             </div>
         </div>
-        <div class="user-avatar">U</div>
+        <div class="user-avatar" onclick="window.location.href='settings.html'">U</div>
     </nav>
 
     <div class="container">
@@ -210,7 +214,7 @@
 
             <div class="generator-card">
                 <div class="form-group">
-                    <label class="form-label">What do you want to create?</label>
+                    <label class="form-label">What do you want to <span style="color:#8b5cf6; font-size: 19px;">Reshape</span></label>
                     <textarea class="form-textarea" id="userTopic" placeholder="E.g., A blog post about sustainable gardening, a Python script to scrape a website, or an email to a client..."></textarea>
                 </div>
 
@@ -284,6 +288,11 @@
                 
                 promptOutput.textContent = generatedText;
                 resultSection.style.display = 'block';
+                
+                // Increment prompt count
+                let count = parseInt(localStorage.getItem('promptCount') || '0');
+                localStorage.setItem('promptCount', count + 1);
+                
                 generateBtn.innerHTML = '<span>✨</span> Generate Magic';
                 
                 // Scroll to result

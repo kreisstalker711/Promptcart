@@ -10,6 +10,10 @@
         if (localStorage.getItem('theme') === 'light') {
             document.documentElement.classList.add('light-theme');
         }
+        // Auth Check
+        if (localStorage.getItem('isLoggedIn') !== 'true') {
+            window.location.href = 'login.html';
+        }
     </script>
     <style>
         :root {
@@ -372,7 +376,7 @@
                 <div class="logo">PromptCart</div>
             </div>
         </div>
-        <div class="user-avatar">U</div>
+        <div class="user-avatar" onclick="window.location.href='settings.html'">U</div>
     </nav>
 
     <div class="container">

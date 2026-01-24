@@ -195,7 +195,7 @@
                 <div class="logo">PromptCart</div>
             </div>
         </div>
-        <div class="user-avatar">U</div>
+        <div class="user-avatar" onclick="window.location.href='settings.html'">U</div>
     </nav>
 
     <div class="container">
@@ -233,6 +233,33 @@
                     </label>
                 </div>
             </div>
+
+            <div class="settings-card" style="margin-top: 24px;">
+                <div class="setting-item">
+                    <div class="setting-label">
+                        <h3>Profile Information</h3>
+                        <p>Your account details and usage stats.</p>
+                    </div>
+                </div>
+                <div class="setting-item">
+                    <div class="setting-label">
+                        <h3>Username</h3>
+                        <p id="profileEmail" style="font-weight: 500;">-</p>
+                    </div>
+                </div>
+                <div class="setting-item">
+                    <div class="setting-label">
+                        <h3>Password</h3>
+                        <p style="font-family: monospace; letter-spacing: 2px;">••••••••</p>
+                    </div>
+                </div>
+                <div class="setting-item">
+                    <div class="setting-label">
+                        <h3>Total Prompts Generated</h3>
+                        <p id="profileCount" style="font-weight: 600; color: var(--primary);">0</p>
+                    </div>
+                </div>
+            </div>
         </main>
     </div>
 
@@ -240,6 +267,8 @@
         const menuToggle = document.getElementById('menuToggle');
         const sidebar = document.getElementById('sidebar');
         const themeToggle = document.getElementById('themeToggle');
+        const profileEmail = document.getElementById('profileEmail');
+        const profileCount = document.getElementById('profileCount');
 
         menuToggle.addEventListener('click', () => sidebar.classList.toggle('open'));
 
@@ -263,6 +292,12 @@
                 localStorage.setItem('theme', 'dark'); // or remove item
             }
         });
+
+        // Load Profile Data
+        const email = localStorage.getItem('userEmail') || 'Guest';
+        const count = localStorage.getItem('promptCount') || '0';
+        if(profileEmail) profileEmail.textContent = email;
+        if(profileCount) profileCount.textContent = count;
     </script>
 </body>
 </html>
