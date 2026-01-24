@@ -213,30 +213,49 @@
             <h1 class="page-title">Generate New Prompt</h1>
 
             <div class="generator-card">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px;">
+                    <div class="form-group" style="margin-bottom: 0;">
+                        <label class="form-label">Role</label>
+                        <input type="text" class="form-input" id="userRole" placeholder="e.g. SaaS Product Designer">
+                    </div>
+                    <div class="form-group" style="margin-bottom: 0;">
+                        <label class="form-label">Domain</label>
+                        <input type="text" class="form-input" id="userDomain" placeholder="e.g. AI Tools">
+                    </div>
+                </div>
+
                 <div class="form-group">
-                    <label class="form-label">What do you want to <span style="color:#8b5cf6; font-size: 19px;">Reshape</span></label>
-                    <textarea class="form-textarea" id="userTopic" placeholder="E.g., A blog post about sustainable gardening, a Python script to scrape a website, or an email to a client..."></textarea>
+                    <label class="form-label">Objective (What to reshape)</label>
+                    <textarea class="form-textarea" id="userObjective" placeholder="E.g., Create a landing page copy for a new AI tool..."></textarea>
                 </div>
 
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
                     <div class="form-group">
+                        <label class="form-label">Target Audience</label>
+                        <input type="text" class="form-input" id="userAudience" placeholder="e.g. Small Business Owners">
+                    </div>
+                    <div class="form-group">
                         <label class="form-label">Tone</label>
                         <select class="form-select" id="userTone">
-                            <option value="professional">Professional</option>
-                            <option value="casual">Casual</option>
-                            <option value="persuasive">Persuasive</option>
-                            <option value="educational">Educational</option>
-                            <option value="witty">Witty</option>
+                            <option value="Professional">Professional</option>
+                            <option value="Casual">Casual</option>
+                            <option value="Persuasive">Persuasive</option>
+                            <option value="Educational">Educational</option>
+                            <option value="Witty">Witty</option>
                         </select>
                     </div>
                     <div class="form-group">
                         <label class="form-label">Format</label>
                         <select class="form-select" id="userFormat">
-                            <option value="paragraph">Paragraph</option>
-                            <option value="bullet-points">Bullet Points</option>
-                            <option value="code">Code Block</option>
-                            <option value="step-by-step">Step-by-Step Guide</option>
+                            <option value="Paragraph">Paragraph</option>
+                            <option value="Bullet Points">Bullet Points</option>
+                            <option value="Code Block">Code Block</option>
+                            <option value="Step-by-Step Guide">Step-by-Step Guide</option>
                         </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Constraints (Optional)</label>
+                        <input type="text" class="form-input" id="userConstraints" placeholder="e.g. Max 200 words">
                     </div>
                 </div>
 
@@ -256,49 +275,78 @@
     </div>
 
     <script>
-        const menuToggle = document.getElementById('menuToggle');
-        const sidebar = document.getElementById('sidebar');
-        const generateBtn = document.getElementById('generateBtn');
-        const resultSection = document.getElementById('resultSection');
-        const promptOutput = document.getElementById('promptOutput');
-        const userTopic = document.getElementById('userTopic');
-        const userTone = document.getElementById('userTone');
-        const userFormat = document.getElementById('userFormat');
+    const menuToggle = document.getElementById('menuToggle');
+    const sidebar = document.getElementById('sidebar');
+    const generateBtn = document.getElementById('generateBtn');
+    const resultSection = document.getElementById('resultSection');
+    const promptOutput = document.getElementById('promptOutput');
 
-        menuToggle.addEventListener('click', () => sidebar.classList.toggle('open'));
+    const userRole = document.getElementById('userRole');
+    const userDomain = document.getElementById('userDomain');
+    const userObjective = document.getElementById('userObjective');
+    const userAudience = document.getElementById('userAudience');
+    const userTone = document.getElementById('userTone');
+    const userFormat = document.getElementById('userFormat');
+    const userConstraints = document.getElementById('userConstraints');
 
-        document.addEventListener('click', (e) => {
-            if (window.innerWidth <= 768 && !sidebar.contains(e.target) && !menuToggle.contains(e.target)) {
-                sidebar.classList.remove('open');
-            }
-        });
+    menuToggle.addEventListener('click', () => sidebar.classList.toggle('open'));
 
-        generateBtn.addEventListener('click', () => {
-            if(!userTopic.value) return;
-            
-            generateBtn.innerHTML = '<span>⏳</span> Generating...';
-            
-            // Simulate API call
-            setTimeout(() => {
-                const topic = userTopic.value;
-                const tone = userTone.value;
-                const format = userFormat.value;
-                
-                const generatedText = `Act as an expert in this field. I need you to write a ${tone} response regarding: "${topic}".\n\nPlease ensure the content is high-quality, original, and directly addresses the user's needs. Structure the output as ${format}. Include relevant examples where necessary and structure the output for maximum readability.`;
-                
-                promptOutput.textContent = generatedText;
-                resultSection.style.display = 'block';
-                
-                // Increment prompt count
-                let count = parseInt(localStorage.getItem('promptCount') || '0');
-                localStorage.setItem('promptCount', count + 1);
-                
-                generateBtn.innerHTML = '<span>✨</span> Generate Magic';
-                
-                // Scroll to result
-                resultSection.scrollIntoView({ behavior: 'smooth' });
-            }, 1500);
-        });
-    </script>
+    document.addEventListener('click', (e) => {
+        if (window.innerWidth <= 768 && 
+            !sidebar.contains(e.target) && 
+            !menuToggle.contains(e.target)) {
+            sidebar.classList.remove('open');
+        }
+    });
+
+    generateBtn.addEventListener('click', async () => {
+
+        // ✅ validation
+        if (!userObjective.value.trim()) {
+            alert("Please enter an objective.");
+            return;
+        }
+
+        generateBtn.innerHTML = '<span>⏳</span> Generating...';
+        generateBtn.disabled = true;
+
+        const requestData = {
+            role: userRole.value,
+            domain: userDomain.value,
+            objective: userObjective.value,
+            targetAudience: userAudience.value,
+            tone: userTone.value,
+            outputFormat: userFormat.value,
+            constraints: userConstraints.value
+        };
+
+        try {
+            const response = await fetch('http://localhost:3000/generate', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(requestData)
+            });
+
+            const data = await response.json();
+
+            promptOutput.textContent = data.prompt;
+            resultSection.style.display = 'block';
+
+            // optional stats
+            let count = parseInt(localStorage.getItem('promptCount') || '0');
+            localStorage.setItem('promptCount', count + 1);
+
+            resultSection.scrollIntoView({ behavior: 'smooth' });
+
+        } catch (error) {
+            console.error(error);
+            alert("❌ Server not running or error occurred");
+        } finally {
+            generateBtn.innerHTML = '<span>✨</span> Generate Magic';
+            generateBtn.disabled = false;
+        }
+    });
+</script>
+
 </body>
 </html>
