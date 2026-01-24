@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard - PromptCart</title>
-    <link rel="icon" href="images/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
     <script>
         // Apply theme from localStorage on page load to prevent FOUC
         if (localStorage.getItem('theme') === 'light') {
@@ -332,6 +332,49 @@
                 gap: 16px;
             }
         }
+
+        /* Hero Section */
+        .hero-section {
+            background: linear-gradient(-45deg, var(--bg), #2d1b4e, var(--bg-card), var(--primary));
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            border-radius: 16px;
+            padding: 60px 20px;
+            text-align: center;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 30px -10px rgba(108, 99, 255, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .typewriter {
+            display: inline-block;
+        }
+
+        .typewriter h1 {
+            color: white;
+            font-family: monospace;
+            overflow: hidden;
+            border-right: .15em solid var(--primary);
+            white-space: nowrap;
+            margin: 0 auto;
+            letter-spacing: .15em;
+            animation: typing 3.5s steps(37, end), blink-caret .75s step-end infinite;
+            font-size: 24px;
+            width: 50ch;
+            max-width: 100%;
+        }
+
+        @keyframes typing { from { width: 0 } }
+        @keyframes blink-caret { from, to { border-color: transparent } 50% { border-color: var(--primary) } 100% {} }
+
+        @media (max-width: 768px) { .typewriter h1 { white-space: normal; border: none; animation: none; width: auto; } }
     </style>
 </head>
 <body>
@@ -339,7 +382,7 @@
         <div style="display: flex; align-items: center; gap: 16px;">
             <button class="mobile-menu-btn" id="menuToggle">☰</button>
             <div style="display: flex; align-items: center; gap: 10px;">
-                <img src="images/logo.png" alt="PromptCart Logo" style="height: 32px;">
+                <img src="logo.png" alt="PromptCart Logo" style="height: 32px;">
                 <div class="logo">PromptCart</div>
             </div>
         </div>
@@ -367,6 +410,12 @@
         </aside>
 
         <main class="main-content">
+            <div class="hero-section">
+                <div class="typewriter">
+                    <h1>Reshape your prompt with &lt;promptcart&gt;</h1>
+                </div>
+            </div>
+
             <h1 class="welcome">Welcome back, Creator 👋</h1>
 
             <div class="stats-grid">
