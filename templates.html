@@ -734,6 +734,7 @@
         const filterBtns = document.querySelectorAll('.filter-btn');
         const templateCards = document.querySelectorAll('.template-card');
         const copyBtns = document.querySelectorAll('.btn-copy');
+        const useBtns = document.querySelectorAll('.btn-use');
         const toast = document.getElementById('toast');
 
         // Initialize Like Buttons
@@ -839,6 +840,27 @@
                         console.error('Failed to copy');
                     }
                     document.body.removeChild(textArea);
+                }
+            });
+        });
+
+        useBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const card = btn.closest('.template-card');
+                const title = card.querySelector('.template-title').innerText;
+                const copyBtn = card.querySelector('.btn-copy');
+                const promptText = copyBtn ? copyBtn.dataset.prompt : '';
+
+                if (promptText) {
+                    const blob = new Blob([promptText], { type: 'text/plain' });
+                    const url = window.URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = title.replace(/[^a-z0-9]/gi, '_').toLowerCase() + '.txt';
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                    window.URL.revokeObjectURL(url);
                 }
             });
         });
