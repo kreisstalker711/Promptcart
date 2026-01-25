@@ -10,6 +10,7 @@
         if (localStorage.getItem('theme') === 'light') {
             document.documentElement.classList.add('light-theme');
         }
+        
         // Auth Check
         if (localStorage.getItem('isLoggedIn') !== 'true') {
             window.location.href = 'login.html';
@@ -17,14 +18,14 @@
     </script>
     <style>
         :root {
-            --primary: #6C63FF;
-            --primary-hover: #5850e6;
-            --bg: #0f0f23;
-            --bg-card: #1a1a2e;
-            --bg-hover: #252540;
-            --text: #e4e4e7;
-            --text-muted: #a1a1aa;
-            --border: #27272a;
+            --primary: #ffffff;
+            --primary-hover: #cccccc;
+            --bg: #000000;
+            --bg-card: #121212;
+            --bg-hover: #272727;
+            --text: #ffffff;
+            --text-muted: #888888;
+            --border: #333333;
             --success: #10b981;
             --warning: #f59e0b;
             --info: #3b82f6;
@@ -67,14 +68,14 @@
         .logo {
             font-size: 20px;
             font-weight: 700;
-            background: linear-gradient(135deg, var(--primary) 0%, #a78bfa 100%);
+            background: linear-gradient(135deg, #ffffff 0%, #666666 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
 
         .light-theme .logo {
-            background: linear-gradient(135deg, var(--primary) 0%, #8b5cf6 100%);
+            background: linear-gradient(135deg, #000000 0%, #666666 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -84,7 +85,7 @@
             width: 36px;
             height: 36px;
             border-radius: 50%;
-            background: linear-gradient(135deg, var(--primary) 0%, #a78bfa 100%);
+            background: linear-gradient(135deg, #333333 0%, #000000 100%);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -131,7 +132,7 @@
         }
 
         .sidebar-item.active {
-            background: rgba(108, 99, 255, 0.1);
+            background: rgba(255, 255, 255, 0.1);
             color: var(--primary);
             border-left: 3px solid var(--primary);
         }
@@ -211,7 +212,7 @@
         .template-category {
             display: inline-block;
             padding: 4px 12px;
-            background: rgba(108, 99, 255, 0.1);
+            background: rgba(255, 255, 255, 0.1);
             color: var(--primary);
             border-radius: 20px;
             font-size: 11px;
@@ -291,7 +292,7 @@
 
         .btn-use {
             background: var(--primary);
-            color: white;
+            color: #000;
         }
 
         .btn-use:hover {
@@ -384,8 +385,7 @@
         <div style="display: flex; align-items: center; gap: 16px;">
             <button class="mobile-menu-btn" id="menuToggle">☰</button>
             <div style="display: flex; align-items: center; gap: 10px;">
-                <img src="logo.png" alt="PromptCart Logo" style="height: 32px;">
-                <div class="logo">PromptCart</div>
+                <img src="logo.png" alt="PromptCart Logo" height="20px">
             </div>
         </div>
         <div class="user-avatar" onclick="window.location.href='settings.html'">U</div>

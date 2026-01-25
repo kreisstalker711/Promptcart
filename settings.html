@@ -13,15 +13,17 @@
     </script>
     <style>
         :root {
-            --primary: #6C63FF;
-            --primary-hover: #5850e6;
-            --bg: #0f0f23;
-            --bg-card: #1a1a2e;
-            --bg-hover: #252540;
-            --text: #e4e4e7;
-            --text-muted: #a1a1aa;
-            --border: #27272a;
+            --primary: #ffffff;
+            --primary-hover: #cccccc;
+            --bg: #000000;
+            --bg-card: #121212;
+            --bg-hover: #272727;
+            --text: #ffffff;
+            --text-muted: #888888;
+            --border: #333333;
             --success: #10b981;
+            --warning: #f59e0b;
+            --info: #3b82f6;
         }
 
         :root.light-theme {
@@ -57,14 +59,14 @@
         .logo {
             font-size: 20px;
             font-weight: 700;
-            background: linear-gradient(135deg, var(--primary) 0%, #a78bfa 100%);
+            background: linear-gradient(135deg, #ffffff 0%, #666666 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
 
         .light-theme .logo {
-            background: linear-gradient(135deg, var(--primary) 0%, #8b5cf6 100%);
+            background: linear-gradient(135deg, #000000 0%, #666666 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -72,7 +74,7 @@
 
         .user-avatar {
             width: 36px; height: 36px; border-radius: 50%;
-            background: linear-gradient(135deg, var(--primary) 0%, #a78bfa 100%);
+            background: linear-gradient(135deg, #333333 0%, #000000 100%);
             display: flex; align-items: center; justify-content: center;
             font-weight: 600; cursor: pointer; transition: transform 0.3s ease;
         }
@@ -173,7 +175,7 @@
         }
         input:checked + .slider:before {
             transform: translateX(22px);
-            background-color: white;
+            background-color: #000;
         }
 
         .mobile-menu-btn { display: none; background: none; border: none; color: var(--text); font-size: 24px; cursor: pointer; }
@@ -188,11 +190,10 @@
 </head>
 <body>
     <nav class="navbar">
-        <div style="display: flex; align-items: center; gap: 16px;">
+       <div style="display: flex; align-items: center; gap: 16px;">
             <button class="mobile-menu-btn" id="menuToggle">☰</button>
             <div style="display: flex; align-items: center; gap: 10px;">
-                <img src="logo.png" alt="PromptCart Logo" style="height: 32px;">
-                <div class="logo">PromptCart</div>
+                <img src="logo.png" alt="PromptCart Logo" height="20px">
             </div>
         </div>
         <div class="user-avatar" onclick="window.location.href='settings.html'">U</div>

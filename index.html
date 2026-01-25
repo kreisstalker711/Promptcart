@@ -14,14 +14,14 @@
     </script>
     <style>
         :root {
-            --primary: #6C63FF;
-            --primary-hover: #5850e6;
-            --bg: #0f0f23;
-            --bg-card: #1a1a2e;
-            --bg-hover: #252540;
-            --text: #e4e4e7;
-            --text-muted: #a1a1aa;
-            --border: #27272a;
+            --primary: #ffffff;
+            --primary-hover: #cccccc;
+            --bg: #000000;
+            --bg-card: #121212;
+            --bg-hover: #272727;
+            --text: #ffffff;
+            --text-muted: #888888;
+            --border: #333333;
             --success: #10b981;
             --warning: #f59e0b;
             --info: #3b82f6;
@@ -48,7 +48,7 @@
             color: var(--text);
             overflow-x: hidden;
         }
-
+        
         .navbar {
             background: var(--bg-card);
             border-bottom: 1px solid var(--border);
@@ -64,14 +64,14 @@
         .logo {
             font-size: 20px;
             font-weight: 700;
-            background: linear-gradient(135deg, var(--primary) 0%, #a78bfa 100%);
+            background: linear-gradient(135deg, #ffffff 0%, #666666 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
 
         .light-theme .logo {
-            background: linear-gradient(135deg, var(--primary) 0%, #8b5cf6 100%);
+            background: linear-gradient(135deg, #000000 0%, #666666 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -81,7 +81,7 @@
             width: 36px;
             height: 36px;
             border-radius: 50%;
-            background: linear-gradient(135deg, var(--primary) 0%, #a78bfa 100%);
+            background: linear-gradient(135deg, #333333 0%, #000000 100%);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -128,7 +128,7 @@
         }
 
         .sidebar-item.active {
-            background: rgba(108, 99, 255, 0.1);
+            background: rgba(255, 255, 255, 0.1);
             color: var(--primary);
             border-left: 3px solid var(--primary);
         }
@@ -282,7 +282,7 @@
         .prompt-category {
             display: inline-block;
             padding: 4px 12px;
-            background: rgba(108, 99, 255, 0.1);
+            background: rgba(255, 255, 255, 0.1);
             color: var(--primary);
             border-radius: 20px;
             font-size: 12px;
@@ -336,7 +336,7 @@
 
         /* Hero Section */
         .hero-section {
-            background: linear-gradient(-45deg, var(--bg), #2d1b4e, var(--bg-card), var(--primary));
+            background: linear-gradient(-45deg, #000000, #1a1a1a, #333333, #000000);
             background-size: 400% 400%;
             animation: gradientBG 15s ease infinite;
             border-radius: 16px;
@@ -520,8 +520,7 @@
         <div style="display: flex; align-items: center; gap: 16px;">
             <button class="mobile-menu-btn" id="menuToggle">☰</button>
             <div style="display: flex; align-items: center; gap: 10px;">
-                <img src="logo.png" alt="PromptCart Logo" style="height: 32px;">
-                <div class="logo">PromptCart</div>
+                <img src="logo.png" alt="PromptCart Logo" height="20px">
             </div>
         </div>
         <div style="display: flex; align-items: center; gap: 16px;">
@@ -532,7 +531,7 @@
 
     <div class="container">
         <aside class="sidebar" id="sidebar">
-            <a href="dashboard.html" class="sidebar-item active">
+            <a href="index.html" class="sidebar-item active">
                 <span>📊</span>
                 <div>Dashboard</div>
             </a>
@@ -558,7 +557,7 @@
         <main class="main-content">
             <div class="hero-section">
                 <div class="typewriter">
-                    <h1>Reshape your prompt with <span style="color:#8b5cf6; font-size: 29px;">&lt;promptcart&gt;</span></h1>
+                    <h1>Reshape your prompt with <span style="color:#ffffff; font-size: 29px;">&lt;promptr_&gt;</span></h1>
                 </div>
             </div>
 
@@ -660,7 +659,7 @@
 
             <div class="section-header">
                 <h2 class="section-title">Recent Prompts</h2>
-                <button class="btn-primary">
+                <button class="btn-primary" onclick="window.location.href='generate.html'">
                     <span>+</span>
                     Create New Prompt
                 </button>
@@ -690,73 +689,7 @@
             </div>
 
             <div class="prompts-list" id="promptsList">
-                <div class="prompt-item">
-                    <div class="prompt-header">
-                        <div class="prompt-title">SEO Blog Post Generator</div>
-                        <div class="prompt-date">2 hours ago</div>
-                    </div>
-                    <div class="prompt-desc">Create SEO-optimized blog posts with keyword integration and meta descriptions</div>
-                    <span class="prompt-category">Writing</span>
-                    <!-- 4️⃣ Model Compatibility Badge & 7️⃣ Score -->
-                    <div class="badges">
-                        <span class="badge">ChatGPT</span>
-                        <span class="badge">Claude</span>
-                        <span class="badge-score">98/100</span>
-                    </div>
-                </div>
-
-                <div class="prompt-item">
-                    <div class="prompt-header">
-                        <div class="prompt-title">Python Code Debugger</div>
-                        <div class="prompt-date">5 hours ago</div>
-                    </div>
-                    <div class="prompt-desc">Analyze Python code and provide debugging suggestions with best practices</div>
-                    <span class="prompt-category">Coding</span>
-                    <div class="badges">
-                        <span class="badge">Gemini</span>
-                        <span class="badge">ChatGPT</span>
-                        <span class="badge-score">95/100</span>
-                    </div>
-                </div>
-
-                <div class="prompt-item">
-                    <div class="prompt-header">
-                        <div class="prompt-title">Social Media Caption Creator</div>
-                        <div class="prompt-date">1 day ago</div>
-                    </div>
-                    <div class="prompt-desc">Generate engaging social media captions with hashtags for multiple platforms</div>
-                    <span class="prompt-category">Marketing</span>
-                    <div class="badges">
-                        <span class="badge">Claude</span>
-                        <span class="badge-score">92/100</span>
-                    </div>
-                </div>
-
-                <div class="prompt-item">
-                    <div class="prompt-header">
-                        <div class="prompt-title">Study Guide Generator</div>
-                        <div class="prompt-date">2 days ago</div>
-                    </div>
-                    <div class="prompt-desc">Transform lecture notes into comprehensive study guides with key points</div>
-                    <span class="prompt-category">Study</span>
-                    <div class="badges">
-                        <span class="badge">Gemini</span>
-                        <span class="badge-score">88/100</span>
-                    </div>
-                </div>
-
-                <div class="prompt-item">
-                    <div class="prompt-header">
-                        <div class="prompt-title">Product Description Writer</div>
-                        <div class="prompt-date">3 days ago</div>
-                    </div>
-                    <div class="prompt-desc">Create compelling product descriptions that convert visitors into customers</div>
-                    <span class="prompt-category">Marketing</span>
-                    <div class="badges">
-                        <span class="badge">ChatGPT</span>
-                        <span class="badge-score">94/100</span>
-                    </div>
-                </div>
+                <!-- Prompts will be loaded here dynamically -->
             </div>
         </main>
     </div>
@@ -768,7 +701,6 @@
         const categoryFilter = document.getElementById('categoryFilter');
         const promptsList = document.getElementById('promptsList');
         const emptyState = document.getElementById('emptyState');
-        const promptItems = document.querySelectorAll('.prompt-item');
 
         menuToggle.addEventListener('click', () => {
             sidebar.classList.toggle('open');
@@ -782,25 +714,69 @@
             }
         });
 
+        function timeAgo(dateString) {
+            const date = new Date(dateString);
+            const now = new Date();
+            const seconds = Math.floor((now - date) / 1000);
+            
+            let interval = seconds / 31536000;
+            if (interval > 1) return Math.floor(interval) + "y ago";
+            interval = seconds / 2592000;
+            if (interval > 1) return Math.floor(interval) + "mo ago";
+            interval = seconds / 86400;
+            if (interval > 1) return Math.floor(interval) + "d ago";
+            interval = seconds / 3600;
+            if (interval > 1) return Math.floor(interval) + "h ago";
+            interval = seconds / 60;
+            if (interval > 1) return Math.floor(interval) + "m ago";
+            return Math.floor(seconds) + "s ago";
+        }
+
         // Search & Filter Logic
-        function filterPrompts() {
+        function renderPrompts() {
+            const recentPrompts = JSON.parse(localStorage.getItem('recentPrompts') || '[]');
             const searchTerm = searchInput.value.toLowerCase();
             const category = categoryFilter.value;
+            
+            promptsList.innerHTML = '';
             let visibleCount = 0;
 
-            promptItems.forEach(item => {
-                const title = item.querySelector('.prompt-title').innerText.toLowerCase();
-                const desc = item.querySelector('.prompt-desc').innerText.toLowerCase();
-                const itemCategory = item.querySelector('.prompt-category').innerText;
+            recentPrompts.forEach(prompt => {
+                const title = (prompt.title || 'Untitled').toLowerCase();
+                const desc = (prompt.desc || '').toLowerCase();
+                const itemCategory = prompt.category || 'General';
                 
                 const matchesSearch = title.includes(searchTerm) || desc.includes(searchTerm);
-                const matchesCategory = category === 'all' || itemCategory === category;
+                const matchesCategory = category === 'all' || itemCategory.toLowerCase() === category.toLowerCase();
 
                 if (matchesSearch && matchesCategory) {
-                    item.style.display = 'block';
                     visibleCount++;
-                } else {
-                    item.style.display = 'none';
+                    const item = document.createElement('div');
+                    item.className = 'prompt-item';
+                    
+                    // Truncate description
+                    const displayDesc = prompt.desc.length > 120 ? prompt.desc.substring(0, 120) + '...' : prompt.desc;
+
+                    item.innerHTML = `
+                        <div class="prompt-header">
+                            <div class="prompt-title">${prompt.title || 'Untitled Prompt'}</div>
+                            <div class="prompt-date">${timeAgo(prompt.date)}</div>
+                        </div>
+                        <div class="prompt-desc">${displayDesc}</div>
+                        <span class="prompt-category">${itemCategory}</span>
+                        <div class="badges">
+                            <span class="badge">${prompt.model || 'AI'}</span>
+                        </div>
+                    `;
+                    
+                    // Click to copy
+                    item.addEventListener('click', () => {
+                         navigator.clipboard.writeText(prompt.desc).then(() => {
+                             alert('Prompt copied to clipboard!');
+                         });
+                    });
+
+                    promptsList.appendChild(item);
                 }
             });
 
@@ -808,14 +784,24 @@
             if (visibleCount === 0) {
                 promptsList.style.display = 'none';
                 emptyState.style.display = 'block';
+                if (recentPrompts.length > 0) {
+                    emptyState.querySelector('h3').textContent = "No matching prompts found";
+                    emptyState.querySelector('p').textContent = "Try adjusting your search filters.";
+                } else {
+                    emptyState.querySelector('h3').textContent = "You haven't created any prompts yet";
+                    emptyState.querySelector('p').textContent = "Start by creating your first AI prompt.";
+                }
             } else {
                 promptsList.style.display = 'block';
                 emptyState.style.display = 'none';
             }
         }
 
-        searchInput.addEventListener('input', filterPrompts);
-        categoryFilter.addEventListener('change', filterPrompts);
+        searchInput.addEventListener('input', renderPrompts);
+        categoryFilter.addEventListener('change', renderPrompts);
+        
+        // Initial Render
+        renderPrompts();
     </script>
 </body>
 </html>
