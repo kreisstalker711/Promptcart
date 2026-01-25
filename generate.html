@@ -22,10 +22,66 @@
   <!-- ⚠️ STYLES UNCHANGED -->
   <style>
 :root { --primary: #ffffff; --primary-hover: #cccccc; --bg: #000000; --bg-card: #121212; --bg-hover: #272727; --text: #ffffff; --text-muted: #888888; --border: #333333; --success: #10b981; } :root.light-theme { --bg: #f4f4f5; --bg-card: #ffffff; --bg-hover: #f9fafb; --text: #18181b; --text-muted: #71717a; --border: #e4e4e7; } * { margin: 0; padding: 0; box-sizing: border-box; } body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif; background: var(--bg); color: var(--text); overflow-x: hidden; } .navbar { background: var(--bg-card); border-bottom: 1px solid var(--border); padding: 16px 24px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; } .logo { font-size: 20px; font-weight: 700; background: linear-gradient(135deg, #ffffff 0%, #666666 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; } .light-theme .logo { background: linear-gradient(135deg, #000000 0%, #666666 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; } .user-avatar { width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(135deg, #333333 0%, #000000 100%); display: flex; align-items: center; justify-content: center; font-weight: 600; cursor: pointer; transition: transform 0.3s ease; } .user-avatar:hover { transform: scale(1.05); } .container { display: flex; min-height: calc(100vh - 69px); } .sidebar { width: 260px; background: var(--bg-card); border-right: 1px solid var(--border); padding: 24px 0; position: sticky; top: 69px; height: calc(100vh - 69px); overflow-y: auto; } .sidebar-item { padding: 12px 24px; display: flex; align-items: center; gap: 12px; color: var(--text-muted); text-decoration: none; transition: all 0.3s ease; cursor: pointer; font-size: 14px; } .sidebar-item:hover { background: var(--bg-hover); color: var(--text); } .sidebar-item.active { background: rgba(255, 255, 255, 0.1); color: var(--primary); border-left: 3px solid var(--primary); } .sidebar-item span { font-size: 18px; } .main-content { flex: 1; padding: 32px; overflow-y: auto; } .page-title { font-size: 28px; font-weight: 600; margin-bottom: 24px; } .generator-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 32px; max-width: 800px; margin-bottom: 32px; } .form-group { margin-bottom: 24px; } .form-label { display: block; margin-bottom: 8px; font-weight: 500; color: var(--text); } .form-input, .form-select, .form-textarea { width: 100%; background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 12px 16px; color: var(--text); font-family: inherit; transition: border-color 0.3s ease; } .form-textarea { min-height: 120px; resize: vertical; } .form-input:focus, .form-select:focus, .form-textarea:focus { outline: none; border-color: var(--primary); } .btn-generate { background: var(--primary); color: #000; border: none; padding: 14px 32px; border-radius: 8px; font-size: 16px; font-weight: 600; cursor: pointer; transition: all 0.3s ease; display: flex; align-items: center; gap: 8px; } .btn-generate:hover { background: var(--primary-hover); transform: translateY(-2px); } .result-section { background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 32px; max-width: 800px; display: none; animation: fadeIn 0.5s ease; } @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } } .result-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; } .result-title { font-size: 18px; font-weight: 600; } .prompt-output { background: var(--bg); padding: 20px; border-radius: 8px; border: 1px solid var(--border); color: var(--text-muted); line-height: 1.6; white-space: pre-wrap; } .mobile-menu-btn { display: none; background: none; border: none; color: var(--text); font-size: 24px; cursor: pointer; } @media (max-width: 768px) { .sidebar { position: fixed; left: -260px; top: 69px; z-index: 99; transition: left 0.3s ease; } .sidebar.open { left: 0; } .mobile-menu-btn { display: block; } .main-content { padding: 20px; } }
+
+/* Loader */
+.loader-container {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: var(--bg); z-index: 9999;
+    display: flex; justify-content: center; align-items: center;
+    transition: opacity 0.5s ease;
+}
+.loader { width: 112px; height: 112px; position: relative; }
+.box1, .box2, .box3 {
+    border: 16px solid var(--text);
+    box-sizing: border-box; position: absolute; display: block;
+}
+.box1 { width: 112px; height: 48px; margin-top: 64px; margin-left: 0px; animation: abox1 4s 1s forwards ease-in-out infinite; }
+.box2 { width: 48px; height: 48px; margin-top: 0px; margin-left: 0px; animation: abox2 4s 1s forwards ease-in-out infinite; }
+.box3 { width: 48px; height: 48px; margin-top: 0px; margin-left: 64px; animation: abox3 4s 1s forwards ease-in-out infinite; }
+@keyframes abox1 {
+    0% { width: 112px; height: 48px; margin-top: 64px; margin-left: 0px; }
+    12.5% { width: 48px; height: 48px; margin-top: 64px; margin-left: 0px; }
+    25% { width: 48px; height: 48px; margin-top: 64px; margin-left: 0px; }
+    37.5% { width: 48px; height: 48px; margin-top: 64px; margin-left: 0px; }
+    50% { width: 48px; height: 48px; margin-top: 64px; margin-left: 0px; }
+    62.5% { width: 48px; height: 48px; margin-top: 64px; margin-left: 0px; }
+    75% { width: 48px; height: 112px; margin-top: 0px; margin-left: 0px; }
+    87.5% { width: 48px; height: 48px; margin-top: 0px; margin-left: 0px; }
+    100% { width: 48px; height: 48px; margin-top: 0px; margin-left: 0px; }
+}
+@keyframes abox2 {
+    0% { width: 48px; height: 48px; margin-top: 0px; margin-left: 0px; }
+    12.5% { width: 48px; height: 48px; margin-top: 0px; margin-left: 0px; }
+    25% { width: 48px; height: 48px; margin-top: 0px; margin-left: 0px; }
+    37.5% { width: 48px; height: 48px; margin-top: 0px; margin-left: 0px; }
+    50% { width: 112px; height: 48px; margin-top: 0px; margin-left: 0px; }
+    62.5% { width: 48px; height: 48px; margin-top: 0px; margin-left: 64px; }
+    75% { width: 48px; height: 48px; margin-top: 0px; margin-left: 64px; }
+    87.5% { width: 48px; height: 48px; margin-top: 0px; margin-left: 64px; }
+    100% { width: 48px; height: 48px; margin-top: 0px; margin-left: 64px; }
+}
+@keyframes abox3 {
+    0% { width: 48px; height: 48px; margin-top: 0px; margin-left: 64px; }
+    12.5% { width: 48px; height: 48px; margin-top: 0px; margin-left: 64px; }
+    25% { width: 48px; height: 112px; margin-top: 0px; margin-left: 64px; }
+    37.5% { width: 48px; height: 48px; margin-top: 64px; margin-left: 64px; }
+    50% { width: 48px; height: 48px; margin-top: 64px; margin-left: 64px; }
+    62.5% { width: 48px; height: 48px; margin-top: 64px; margin-left: 64px; }
+    75% { width: 48px; height: 48px; margin-top: 64px; margin-left: 64px; }
+    87.5% { width: 48px; height: 48px; margin-top: 64px; margin-left: 64px; }
+    100% { width: 112px; height: 48px; margin-top: 64px; margin-left: 0px; }
+}
   </style>
 </head>
 
 <body>
+<div class="loader-container" id="loader">
+    <div class="loader">
+        <div class="box1"></div>
+        <div class="box2"></div>
+        <div class="box3"></div>
+    </div>
+</div>
 
 <nav class="navbar">
   <div style="display: flex; align-items: center; gap: 16px;">
@@ -165,9 +221,19 @@ copyBtn.addEventListener("click", () => {
     copyBtn.textContent = "📋 Copy";
   }, 1500);
 });
+
+window.addEventListener('load', () => {
+            setTimeout(() => {
+                const loader = document.getElementById('loader');
+                if (loader) {
+                    loader.style.opacity = '0';
+                    setTimeout(() => {
+                        loader.style.display = 'none';
+                    }, 500);
+                }
+            }, 2500);
+        });
+
 </script>
-
-
-
 </body>
 </html>
