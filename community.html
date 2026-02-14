@@ -1,0 +1,789 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Community - PromptCart</title>
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <script>
+        // Apply theme from localStorage on page load to prevent FOUC
+        if (localStorage.getItem('theme') === 'light') {
+            document.documentElement.classList.add('light-theme');
+        }
+        
+        // Auth Check
+        if (localStorage.getItem('isLoggedIn') !== 'true') {
+            window.location.href = 'login.html';
+        }
+    </script>
+    <style>
+        :root {
+            --primary: #ffffff;
+            --primary-hover: #cccccc;
+            --bg: #000000;
+            --bg-card: #121212;
+            --bg-hover: #272727;
+            --text: #ffffff;
+            --text-muted: #888888;
+            --border: #333333;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --info: #3b82f6;
+        }
+
+        :root.light-theme {
+            --bg: #f4f4f5;
+            --bg-card: #ffffff;
+            --bg-hover: #f9fafb;
+            --text: #18181b;
+            --text-muted: #71717a;
+            --border: #e4e4e7;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            overflow-x: hidden;
+        }
+
+        /* Loader */
+        .loader-container {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--bg); z-index: 9999;
+            display: flex; justify-content: center; align-items: center;
+            transition: opacity 0.5s ease;
+        }
+        .loader { width: 112px; height: 112px; position: relative; }
+        .box1, .box2, .box3 {
+            border: 16px solid var(--text);
+            box-sizing: border-box; position: absolute; display: block;
+        }
+        .box1 { width: 112px; height: 48px; margin-top: 64px; margin-left: 0px; animation: abox1 4s 1s forwards ease-in-out infinite; }
+        .box2 { width: 48px; height: 48px; margin-top: 0px; margin-left: 0px; animation: abox2 4s 1s forwards ease-in-out infinite; }
+        .box3 { width: 48px; height: 48px; margin-top: 0px; margin-left: 64px; animation: abox3 4s 1s forwards ease-in-out infinite; }
+        @keyframes abox1 {
+            0% { width: 112px; height: 48px; margin-top: 64px; margin-left: 0px; }
+            12.5% { width: 48px; height: 48px; margin-top: 64px; margin-left: 0px; }
+            25% { width: 48px; height: 48px; margin-top: 64px; margin-left: 0px; }
+            37.5% { width: 48px; height: 48px; margin-top: 64px; margin-left: 0px; }
+            50% { width: 48px; height: 48px; margin-top: 64px; margin-left: 0px; }
+            62.5% { width: 48px; height: 48px; margin-top: 64px; margin-left: 0px; }
+            75% { width: 48px; height: 112px; margin-top: 0px; margin-left: 0px; }
+            87.5% { width: 48px; height: 48px; margin-top: 0px; margin-left: 0px; }
+            100% { width: 48px; height: 48px; margin-top: 0px; margin-left: 0px; }
+        }
+        @keyframes abox2 {
+            0% { width: 48px; height: 48px; margin-top: 0px; margin-left: 0px; }
+            12.5% { width: 48px; height: 48px; margin-top: 0px; margin-left: 0px; }
+            25% { width: 48px; height: 48px; margin-top: 0px; margin-left: 0px; }
+            37.5% { width: 48px; height: 48px; margin-top: 0px; margin-left: 0px; }
+            50% { width: 112px; height: 48px; margin-top: 0px; margin-left: 0px; }
+            62.5% { width: 48px; height: 48px; margin-top: 0px; margin-left: 64px; }
+            75% { width: 48px; height: 48px; margin-top: 0px; margin-left: 64px; }
+            87.5% { width: 48px; height: 48px; margin-top: 0px; margin-left: 64px; }
+            100% { width: 48px; height: 48px; margin-top: 0px; margin-left: 64px; }
+        }
+        @keyframes abox3 {
+            0% { width: 48px; height: 48px; margin-top: 0px; margin-left: 64px; }
+            12.5% { width: 48px; height: 48px; margin-top: 0px; margin-left: 64px; }
+            25% { width: 48px; height: 112px; margin-top: 0px; margin-left: 64px; }
+            37.5% { width: 48px; height: 48px; margin-top: 64px; margin-left: 64px; }
+            50% { width: 48px; height: 48px; margin-top: 64px; margin-left: 64px; }
+            62.5% { width: 48px; height: 48px; margin-top: 64px; margin-left: 64px; }
+            75% { width: 48px; height: 48px; margin-top: 64px; margin-left: 64px; }
+            87.5% { width: 48px; height: 48px; margin-top: 64px; margin-left: 64px; }
+            100% { width: 112px; height: 48px; margin-top: 64px; margin-left: 0px; }
+        }
+
+        .navbar {
+            background: var(--bg-card);
+            border-bottom: 1px solid var(--border);
+            padding: 16px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            font-size: 20px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #ffffff 0%, #666666 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .light-theme .logo {
+            background: linear-gradient(135deg, #000000 0%, #666666 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .user-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #333333 0%, #000000 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .user-avatar:hover {
+            transform: scale(1.05);
+        }
+
+        .container {
+            display: flex;
+            min-height: calc(100vh - 69px);
+        }
+
+        .sidebar {
+            width: 260px;
+            background: var(--bg-card);
+            border-right: 1px solid var(--border);
+            padding: 24px 0;
+            position: sticky;
+            top: 69px;
+            height: calc(100vh - 69px);
+            overflow-y: auto;
+        }
+
+        .sidebar-item {
+            padding: 12px 24px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .sidebar-item:hover {
+            background: var(--bg-hover);
+            color: var(--text);
+        }
+
+        .sidebar-item.active {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--primary);
+            border-left: 3px solid var(--primary);
+        }
+
+        .sidebar-item span {
+            font-size: 18px;
+        }
+
+        .main-content {
+            flex: 1;
+            padding: 32px;
+            overflow-y: auto;
+        }
+
+        .page-title {
+            font-size: 28px;
+            font-weight: 600;
+            margin-bottom: 24px;
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--text);
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        /* Community Specific Styles */
+        .top-section {
+            display: flex;
+            gap: 24px;
+            margin-bottom: 32px;
+        }
+
+        .upload-section {
+            flex: 1;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 24px;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 8px;
+            color: var(--text);
+        }
+
+        .form-input, .form-textarea, .form-select {
+            width: 100%;
+            padding: 10px 14px;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text);
+            font-size: 14px;
+            font-family: inherit;
+            transition: all 0.3s ease;
+        }
+
+        .form-input:focus, .form-textarea:focus, .form-select:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .form-textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .form-textarea.large {
+            min-height: 150px;
+        }
+
+        .btn-submit {
+            width: 100%;
+            padding: 12px 24px;
+            background: var(--primary);
+            color: #000;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-submit:hover {
+            background: var(--primary-hover);
+            transform: translateY(-1px);
+        }
+
+        .filter-search-section {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+        }
+
+        .search-input {
+            flex: 1;
+            min-width: 250px;
+            padding: 10px 14px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text);
+            font-size: 14px;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .filter-select {
+            padding: 10px 14px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text);
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .prompts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 24px;
+        }
+
+        .prompt-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 24px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .prompt-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+            border-color: var(--primary);
+        }
+
+        .light-theme .prompt-card:hover {
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+        }
+
+        .prompt-category {
+            display: inline-block;
+            padding: 4px 12px;
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--primary);
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            margin-bottom: 12px;
+        }
+
+        .prompt-card[data-category="writing"] .prompt-category {
+            background: rgba(139, 92, 246, 0.1);
+            color: #8b5cf6;
+        }
+
+        .prompt-card[data-category="coding"] .prompt-category {
+            background: rgba(59, 130, 246, 0.1);
+            color: #3b82f6;
+        }
+
+        .prompt-card[data-category="marketing"] .prompt-category {
+            background: rgba(245, 158, 11, 0.1);
+            color: #f59e0b;
+        }
+
+        .prompt-card[data-category="study"] .prompt-category {
+            background: rgba(16, 185, 129, 0.1);
+            color: #10b981;
+        }
+
+        .prompt-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .prompt-desc {
+            color: var(--text-muted);
+            font-size: 14px;
+            line-height: 1.6;
+            margin-bottom: 12px;
+        }
+
+        .prompt-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-bottom: 16px;
+        }
+
+        .tag {
+            padding: 4px 10px;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .prompt-meta {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 16px;
+            padding-top: 12px;
+            border-top: 1px solid var(--border);
+        }
+
+        .author {
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        .upvotes {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 14px;
+            color: var(--text-muted);
+        }
+
+        .prompt-actions {
+            display: flex;
+            gap: 12px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 10px 16px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .btn-copy {
+            background: var(--bg);
+            color: var(--text);
+            border: 1px solid var(--border);
+        }
+
+        .btn-copy:hover {
+            background: var(--bg-hover);
+            border-color: var(--primary);
+        }
+
+        .btn-view {
+            background: var(--primary);
+            color: #000;
+        }
+
+        .btn-view:hover {
+            background: var(--primary-hover);
+            transform: translateY(-1px);
+        }
+
+        .btn-upvote {
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--text-muted);
+        }
+
+        .btn-upvote:hover {
+            border-color: var(--info);
+            color: var(--info);
+        }
+
+        .btn-upvote.upvoted {
+            border-color: var(--info);
+            color: var(--info);
+            background: rgba(59, 130, 246, 0.1);
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            background: var(--success);
+            color: white;
+            padding: 16px 24px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        .light-theme .toast {
+            background: var(--success);
+            color: white;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 1001;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 32px;
+            max-width: 600px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-title {
+            font-size: 22px;
+            font-weight: 600;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-size: 28px;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .modal-close:hover {
+            color: var(--text);
+        }
+
+        .modal-body {
+            color: var(--text);
+        }
+
+        .prompt-full-content {
+            background: var(--bg);
+            padding: 16px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            margin-top: 16px;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        @media (max-width: 1024px) {
+            .top-section {
+                flex-direction: column;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                position: fixed;
+                left: -260px;
+                top: 69px;
+                z-index: 99;
+                transition: left 0.3s ease;
+            }
+
+            .sidebar.open {
+                left: 0;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .main-content {
+                padding: 20px;
+            }
+
+            .page-title {
+                font-size: 24px;
+            }
+
+            .prompts-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .filter-search-section {
+                flex-direction: column;
+            }
+
+            .search-input {
+                width: 100%;
+            }
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--text-muted);
+        }
+
+        .empty-state span {
+            font-size: 48px;
+            display: block;
+            margin-bottom: 16px;
+        }
+    </style>
+</head>
+<body>
+    <div class="loader-container" id="loader">
+        <div class="loader">
+            <div class="box1"></div>
+            <div class="box2"></div>
+            <div class="box3"></div>
+        </div>
+    </div>
+
+    <nav class="navbar">
+        <div style="display: flex; align-items: center; gap: 16px;">
+            <button class="mobile-menu-btn" id="menuToggle">☰</button>
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <img src="logo.png" alt="PromptCart Logo" height="20px">
+            </div>
+        </div>
+        <div class="user-avatar" onclick="window.location.href='settings.html'">U</div>
+    </nav>
+
+    <div class="container">
+        <aside class="sidebar" id="sidebar">
+            <a href="index.html" class="sidebar-item">
+                <span>📊</span>
+                <div>Dashboard</div>
+            </a>
+            <a href="templates.html" class="sidebar-item">
+                <span>📝</span>
+                <div>Templates</div>
+            </a>
+            <a href="liked.html" class="sidebar-item">
+                <span>❤️</span>
+                <div>Liked Prompts</div>
+            </a>
+            <a href="generate.html" class="sidebar-item">
+                <span>✨</span>
+                <div>Generate Prompt</div>
+            </a>
+            <a href="community.html" class="sidebar-item active">
+                <span>👥</span>
+                <div>Community</div>
+            </a>
+            <a href="settings.html" class="sidebar-item">
+                <span>⚙️</span>
+                <div>Settings</div>
+            </a>
+        </aside>
+
+        <main class="main-content">
+            <h1 class="page-title">Community Prompts</h1>
+
+            <div class="top-section">
+                <div class="upload-section">
+                    <h2 class="section-title">Share Your Prompt</h2>
+                    <form id="uploadForm">
+                        <div class="form-group">
+                            <label class="form-label">Prompt Title</label>
+                            <input type="text" class="form-input" id="promptTitle" placeholder="e.g., Advanced Code Reviewer" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Description</label>
+                            <textarea class="form-textarea" id="promptDesc" placeholder="Brief description of what this prompt does..." required></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Category</label>
+                            <select class="form-select" id="promptCategory" required>
+                                <option value="">Select Category</option>
+                                <option value="writing">Writing</option>
+                                <option value="coding">Coding</option>
+                                <option value="marketing">Marketing</option>
+                                <option value="study">Study</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Tags (comma separated)</label>
+                            <input type="text" class="form-input" id="promptTags" placeholder="e.g., javascript, react, debugging">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Author Name</label>
+                            <input type="text" class="form-input" id="promptAuthor" placeholder="Your name" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Prompt Content</label>
+                            <textarea class="form-textarea large" id="promptContent" placeholder="Enter your full prompt here..." required></textarea>
+                        </div>
+
+                        <button type="submit" class="btn-submit">📤 Share Prompt</button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="filter-search-section">
+                <input type="text" class="search-input" id="searchInput" placeholder="🔍 Search prompts by title or tags...">
+                <select class="filter-select" id="categoryFilter">
+                    <option value="all">All Categories</option>
+                    <option value="writing">Writing</option>
+                    <option value="coding">Coding</option>
+                    <option value="marketing">Marketing</option>
+                    <option value="study">Study</option>
+                    <option value="other">Other</option>
+                </select>
+            </div>
+
+            <div class="prompts-grid" id="promptsGrid">
+                <!-- Prompts will be loaded here -->
+            </div>
+
+            <div class="empty-state" id="emptyState" style="display: none;">
+                <span>📭</span>
+                <h3>No prompts found</h3>
+                <p>Be the first to share a prompt or adjust your filters!</p>
+            </div>
+        </main>
+    </div>
+
+    <!-- View Full Prompt Modal -->
+    <div class="modal" id="viewModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="modalTitle">Prompt Details</h2>
+                <button class="modal-close" id="modalClose">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="prompt-category" id="modalCategory">Category</div>
+                <p class="prompt-desc" id="modalDesc">Description</p>
+                <div class="prompt-tags" id="modalTags"></div>
+                <div class="prompt-meta">
+                    <span class="author" id="modalAuthor">Author</span>
+                    <span class="upvotes" id="modalUpvotes">👍 0</span>
+                </div>
+                <div class="prompt-full-content" id="modalContent"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="toast" id="toast">Action completed!</div>
+
+    <script src="community.js"></script>
+</body>
+</html>
