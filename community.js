@@ -1,3 +1,8 @@
+// API Base URL
+const API_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+    ? 'http://localhost:3000/api'
+    : '/api';
+
 // DOM Elements
 const menuToggle = document.getElementById('menuToggle');
 const sidebar = document.getElementById('sidebar');
@@ -72,10 +77,16 @@ async function handleFormSubmit(e) {
     };
 
     try {
-        // Save to LocalStorage instead of API
-        const prompts = JSON.parse(localStorage.getItem('communityPrompts') || '[]');
-        prompts.unshift(formData);
-        localStorage.setItem('communityPrompts', JSON.stringify(prompts));
+        const response = await fetch(`${API_URL}/prompts`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(formData)
+        });
+
+        if (!response.ok) throw new Error('Failed to upload prompt');
+        const result = await response.json();
         
         showToast('✅ Prompt shared successfully!');
         uploadForm.reset();
@@ -89,25 +100,13 @@ async function handleFormSubmit(e) {
 // Load Prompts from Backend
 async function loadPrompts() {
     try {
-        let prompts = JSON.parse(localStorage.getItem('communityPrompts'));
+        const response = await fetch(`${API_URL}/prompts`);
         
-        if (!prompts) {
-            // Seed with dummy data if empty
-            prompts = [{
-                _id: '1',
-                title: 'Welcome to Community',
-                description: 'This is a sample prompt to get you started.',
-                category: 'other',
-                tags: ['welcome', 'sample'],
-                author: 'PromptCart',
-                content: 'Hello World! This is a sample prompt.',
-                upvotes: 0,
-                timestamp: new Date().toISOString()
-            }];
-            localStorage.setItem('communityPrompts', JSON.stringify(prompts));
-        }
+        if (!response.ok) throw new Error('Failed to fetch prompts');
 
-        allPrompts = prompts;
+        const data = await response.json();
+        // Handle both array directly or { data: [] } format depending on your API
+        allPrompts = Array.isArray(data) ? data : (data.data || []);
         renderPrompts(allPrompts);
     } catch (error) {
         console.error('Error loading prompts:', error);
@@ -189,17 +188,15 @@ async function handleUpvote(promptId, btn) {
     }
 
     try {
-        const prompts = JSON.parse(localStorage.getItem('communityPrompts') || '[]');
-        const promptIndex = prompts.findIndex(p => p._id === promptId);
-        
-        if (promptIndex !== -1) {
-            prompts[promptIndex].upvotes = (prompts[promptIndex].upvotes || 0) + 1;
-            localStorage.setItem('communityPrompts', JSON.stringify(prompts));
-            
-            // Update UI
-            const upvoteCount = btn.closest('.prompt-card').querySelector('.upvote-count');
-            upvoteCount.textContent = prompts[promptIndex].upvotes;
-        }
+        const response = await fetch(`${API_URL}/prompts/${promptId}/upvote`, {
+            method: 'POST'
+        });
+
+        if (!response.ok) throw new Error('Failed to upvote');
+        const result = await response.json();
+
+        const upvoteCount = btn.closest('.prompt-card').querySelector('.upvote-count');
+        upvoteCount.textContent = result.upvotes || (parseInt(upvoteCount.textContent) + 1);
         btn.classList.add('upvoted');
 
         // Save to localStorage
